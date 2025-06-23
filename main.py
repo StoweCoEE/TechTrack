@@ -17,6 +17,7 @@ logo = PhotoImage(file='images\\techtrack_full.png')
 logocanvas = Canvas(root, bg="#bcdfeb")
 logocanvas.pack()
 logocanvas.create_image(0,0,image=logo)
+#testing to see if you see anything
 
 # tkinter GUI loop runs application
 root.mainloop()
