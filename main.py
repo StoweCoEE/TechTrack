@@ -51,37 +51,82 @@ class HomePage(Frame):
 class AddAssetPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.pin_icon()
         Label(self, text="Add Asset Page").pack(side="top", fill="x", pady=10)
         Button(self, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack()
         
+    def pin_icon(self):
+        global tt_icon_tk
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon_tk = ImageTk.PhotoImage(tt_icon)
+        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
+        iconcanvas.pack()
+        iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+        
 class AddWorksitePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.pin_icon()
         Label(self, text="Add Worksite Page").pack(side="top", fill="x", pady=10)
         Button(self, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack()
         
+    def pin_icon(self):
+        global tt_icon_tk
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon_tk = ImageTk.PhotoImage(tt_icon)
+        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
+        iconcanvas.pack()
+        iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+        
 class UpdatePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.pin_icon()
         Label(self, text="Update Page").pack(side="top", fill="x", pady=10)
         Button(self, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack()
         
+    def pin_icon(self):
+        global tt_icon_tk
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon_tk = ImageTk.PhotoImage(tt_icon)
+        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
+        iconcanvas.pack()
+        iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+        
 class DeletePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.pin_icon()
         Label(self, text="Delete Page").pack(side="top", fill="x", pady=10)
         Button(self, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack()
         
+    def pin_icon(self):
+        global tt_icon_tk
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon_tk = ImageTk.PhotoImage(tt_icon)
+        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
+        iconcanvas.pack()
+        iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+        
 class ViewPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.pin_icon()
         Label(self, text="View Page").pack(side="top", fill="x", pady=10)
         Button(self, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack()
+        
+    def pin_icon(self):
+        global tt_icon_tk
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon_tk = ImageTk.PhotoImage(tt_icon)
+        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
+        iconcanvas.pack()
+        iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
         
 if __name__ == "__main__":
     tt = TechTrack()
