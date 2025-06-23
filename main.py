@@ -1,18 +1,22 @@
 from tkinter import *
+from PIL import ImageTk, Image
 import sqlite3
 
-window = Tk()
-window.geometry("1280x720")
-window.title("TechTrack")
+# Open tkinter GUI window and set dimensions and title
+root = Tk()
+root.geometry("1280x720")
+root.title("TechTrack")
 
-window.config(background="#bcdfeb")
+# Set GUI window icon and background color
+root.config(background="#bcdfeb")
 icon = PhotoImage(file='images\\techtrack_logo.png')
-window.iconphoto(True, icon)
+root.iconphoto(True, icon)
 
+# Creates graphic with name and logo
 logo = PhotoImage(file='images\\techtrack_full.png')
-logocanvas = Canvas(window, bg="#bcdfeb")
+logocanvas = Canvas(root, bg="#bcdfeb")
 logocanvas.pack()
-
 logocanvas.create_image(0,0,image=logo)
 
-window.mainloop()
+# tkinter GUI loop runs application
+root.mainloop()
