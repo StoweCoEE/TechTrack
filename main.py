@@ -14,5 +14,6 @@ logocanvas = Canvas(window, bg="#bcdfeb")
 logocanvas.pack()
 
 logocanvas.create_image(0,0,image=logo)
+#testing to see if you see anything
 
 window.mainloop()
