@@ -83,6 +83,7 @@ class AddAssetPage(Frame):
 class AddWorksitePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.config(background="#bcdfeb")
 
         # Set frames for banner and main content
         topFrame = Frame(self, bg="#9ed1e1")
@@ -106,6 +107,7 @@ class AddWorksitePage(Frame):
 class UpdatePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.config(background="#bcdfeb")
 
         # Set frames for banner and main content
         topFrame = Frame(self, bg="#9ed1e1")
@@ -129,6 +131,7 @@ class UpdatePage(Frame):
 class DeletePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.config(background="#bcdfeb")
 
         # Set frames for banner and main content
         topFrame = Frame(self, bg="#9ed1e1")
@@ -152,6 +155,7 @@ class DeletePage(Frame):
 class ViewPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.config(background="#bcdfeb")
 
         # Set frames for banner and main content
         topFrame = Frame(self, bg="#9ed1e1")
