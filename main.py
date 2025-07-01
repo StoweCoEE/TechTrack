@@ -62,22 +62,22 @@ class AddAssetPage(Frame):
         super().__init__(parent)
         self.config(background="#bcdfeb")
         
-        # Establish a 32x18 grid. Each spot represents 40px.
-        self.columnconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
-                              17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32),weight=1)
-        self.rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),weight=1)
+        topFrame = Frame(self)
+        bottomFrame = Frame(self)
+        topFrame.pack(side="top")
+        bottomFrame.pack(side="bottom")
 
         self.pin_icon()
-        Label(self, text="Add Asset Page",font=20,bg="#9ed1e1",width=100).grid(row=0,column=2,sticky=NSEW)
+        Label(self, text="Add Asset Page",font=20,bg="#9ed1e1",width=100).pack(side="left")
         Button(self, text="Return to Home Page",
-               command=lambda: parent.switch_frame(HomePage)).grid(row=0,column=24,columnspan=8,sticky=NSEW)
+               command=lambda: parent.switch_frame(HomePage)).pack(side="left")
         
-    def pin_icon(self):
+    def pin_icon(topFrame):
         global tt_icon_tk
         tt_icon = Image.open('images\\techtrack_icon.png').resize((100,100))
         tt_icon_tk = ImageTk.PhotoImage(tt_icon)
-        iconcanvas = Canvas(self, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
-        iconcanvas.grid(row=0,column=0,sticky=NW)
+        iconcanvas = Canvas(topFrame, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
+        iconcanvas.pack(side="left")
         iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
         
 class AddWorksitePage(Frame):
