@@ -2,7 +2,6 @@ from tkinter import *
 from PIL import ImageTk, Image
 import sqlite3
 
-#Label(self,text="Test",bg="red")
 
 class TechTrack(Tk):
     def __init__(self):
@@ -62,87 +61,116 @@ class AddAssetPage(Frame):
         super().__init__(parent)
         self.config(background="#bcdfeb")
         
-        topFrame = Frame(self)
-        bottomFrame = Frame(self)
+        # Set frames for banner and main content
+        topFrame = Frame(self, bg="#9ed1e1")
+        mainFrame = Frame(self, bg="#9ed1e1")
         topFrame.pack(side="top")
-        bottomFrame.pack(side="bottom")
+        mainFrame.pack(side="bottom")
 
-        self.pin_icon()
-        Label(self, text="Add Asset Page",font=20,bg="#9ed1e1",width=100).pack(side="left")
-        Button(self, text="Return to Home Page",
-               command=lambda: parent.switch_frame(HomePage)).pack(side="left")
-        
-    def pin_icon(topFrame):
+        # banner icon creation
         global tt_icon_tk
         tt_icon = Image.open('images\\techtrack_icon.png').resize((100,100))
         tt_icon_tk = ImageTk.PhotoImage(tt_icon)
         iconcanvas = Canvas(topFrame, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
         iconcanvas.pack(side="left")
         iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+
+        #banner label and return button
+        Label(topFrame, text="Add Asset Page",font=20,bg="#9ed1e1",width=100).pack(side="left",fill="y")
+        Button(topFrame, text="Return to Home Page",
+               command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
 class AddWorksitePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        self.pin_icon()
-        Label(self, text="Add Worksite Page").pack(side="top", fill="x", pady=10)
-        Button(self, text="Return to Home Page",
-               command=lambda: parent.switch_frame(HomePage)).pack()
-        
-    def pin_icon(self):
+
+        # Set frames for banner and main content
+        topFrame = Frame(self, bg="#9ed1e1")
+        mainFrame = Frame(self, bg="#9ed1e1")
+        topFrame.pack(side="top")
+        mainFrame.pack(side="bottom")
+
+        # banner icon creation
         global tt_icon_tk
-        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((100,100))
         tt_icon_tk = ImageTk.PhotoImage(tt_icon)
-        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
-        iconcanvas.pack()
+        iconcanvas = Canvas(topFrame, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
+        iconcanvas.pack(side="left")
         iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+
+        #banner label and return button
+        Label(topFrame, text="Add Worksite Page",font=20,bg="#9ed1e1",width=100).pack(side="left",fill="y")
+        Button(topFrame, text="Return to Home Page",
+               command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
 class UpdatePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        self.pin_icon()
-        Label(self, text="Update Page").pack(side="top", fill="x", pady=10)
-        Button(self, text="Return to Home Page",
-               command=lambda: parent.switch_frame(HomePage)).pack()
-        
-    def pin_icon(self):
+
+        # Set frames for banner and main content
+        topFrame = Frame(self, bg="#9ed1e1")
+        mainFrame = Frame(self, bg="#9ed1e1")
+        topFrame.pack(side="top")
+        mainFrame.pack(side="bottom")
+
+        # banner icon creation
         global tt_icon_tk
-        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((100,100))
         tt_icon_tk = ImageTk.PhotoImage(tt_icon)
-        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
-        iconcanvas.pack()
+        iconcanvas = Canvas(topFrame, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
+        iconcanvas.pack(side="left")
         iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+
+        #banner label and return button
+        Label(topFrame, text="Update Page",font=20,bg="#9ed1e1",width=100).pack(side="left",fill="y")
+        Button(topFrame, text="Return to Home Page",
+               command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
 class DeletePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        self.pin_icon()
-        Label(self, text="Delete Page").pack(side="top", fill="x", pady=10)
-        Button(self, text="Return to Home Page",
-               command=lambda: parent.switch_frame(HomePage)).pack()
-        
-    def pin_icon(self):
+
+        # Set frames for banner and main content
+        topFrame = Frame(self, bg="#9ed1e1")
+        mainFrame = Frame(self, bg="#9ed1e1")
+        topFrame.pack(side="top")
+        mainFrame.pack(side="bottom")
+
+        # banner icon creation
         global tt_icon_tk
-        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((100,100))
         tt_icon_tk = ImageTk.PhotoImage(tt_icon)
-        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
-        iconcanvas.pack()
+        iconcanvas = Canvas(topFrame, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
+        iconcanvas.pack(side="left")
         iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+
+        #banner label and return button
+        Label(topFrame, text="Delete Page",font=20,bg="#9ed1e1",width=100).pack(side="left",fill="y")
+        Button(topFrame, text="Return to Home Page",
+               command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
 class ViewPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        self.pin_icon()
-        Label(self, text="View Page").pack(side="top", fill="x", pady=10)
-        Button(self, text="Return to Home Page",
-               command=lambda: parent.switch_frame(HomePage)).pack()
-        
-    def pin_icon(self):
+
+        # Set frames for banner and main content
+        topFrame = Frame(self, bg="#9ed1e1")
+        mainFrame = Frame(self, bg="#9ed1e1")
+        topFrame.pack(side="top")
+        mainFrame.pack(side="bottom")
+
+        # banner icon creation
         global tt_icon_tk
-        tt_icon = Image.open('images\\techtrack_icon.png').resize((150,150))
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((100,100))
         tt_icon_tk = ImageTk.PhotoImage(tt_icon)
-        iconcanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=150, height=150)
-        iconcanvas.pack()
+        iconcanvas = Canvas(topFrame, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
+        iconcanvas.pack(side="left")
         iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+
+        #banner label and return button
+        Label(topFrame, text="View Page",font=20,bg="#9ed1e1",width=100).pack(side="left",fill="y")
+        Button(topFrame, text="Return to Home Page",
+               command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
 if __name__ == "__main__":
     tt = TechTrack()
