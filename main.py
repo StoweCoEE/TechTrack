@@ -29,32 +29,41 @@ class HomePage(Frame):
         super().__init__(parent)
         self.config(background="#bcdfeb")
 
-        # Establish a 32x18 grid. Each spot represents 40px.
-        self.columnconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
-                              17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32),weight=1)
-        self.rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),weight=1)
+        # Set frames for banner and main content
+        topFrame = Frame(self, bg="#bcdfeb")
+        mainFrame = Frame(self, bg="#bcdfeb",width=1280,height=523)
+        mainFrame.grid_propagate(False)
+        topFrame.pack(side="top")
+        mainFrame.pack(side="bottom")
 
-        self.create_logo()
-        Label(self, text="This is the start page").grid(row=1,column=16)
-        Button(self, text="Add Asset",
-               command=lambda: parent.switch_frame(AddAssetPage)).grid(row=8,column=16)
-        Button(self, text="Add Worksite",
-               command=lambda: parent.switch_frame(AddWorksitePage)).grid(row=10,column=10)
-        Button(self, text="Update Asset/Worksite",
-               command=lambda: parent.switch_frame(UpdatePage)).grid(row=10,column=20)
-        Button(self, text="Delete Asset/Worksite",
-               command=lambda: parent.switch_frame(DeletePage)).grid(row=13,column=10)
-        Button(self, text="View Assets/Worksites",
-               command=lambda: parent.switch_frame(ViewPage)).grid(row=13,column=20)
-        
-        
-    def create_logo(self):
+        # Establish a 32x18 grid. Each spot represents 40px.
+        topFrame.columnconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
+                              17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32),weight=1)
+        topFrame.rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),weight=1)
+
+        # Establish a 32x18 grid. Each spot represents 40px.
+        mainFrame.columnconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
+                              17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32),weight=1)
+        mainFrame.rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),weight=1)
+
+
         global tt_logo_tk
         tt_logo = Image.open('images\\techtrack_full.png').resize((394,197))
         tt_logo_tk = ImageTk.PhotoImage(tt_logo)
-        logocanvas = Canvas(self, bg="#bcdfeb", bd=0, highlightthickness=0, width=394, height=197)
+        logocanvas = Canvas(topFrame, bg="#bcdfeb", bd=0, highlightthickness=0, width=394, height=197)
         logocanvas.grid(row=0,column=16)
         logocanvas.create_image(0, 0, image=tt_logo_tk, anchor=NW)
+
+        Button(mainFrame, text="View Assets/Worksites", width=20, height=5, font=20,
+               command=lambda: parent.switch_frame(ViewPage)).grid(row=0,column=16,pady=20)
+        Button(mainFrame, text="Add Asset", width=20, height=5,font=20,
+               command=lambda: parent.switch_frame(AddAssetPage)).grid(row=6,column=12)
+        Button(mainFrame, text="Add Worksite", width=20, height=5,font=20,
+               command=lambda: parent.switch_frame(AddWorksitePage)).grid(row=6,column=20)
+        Button(mainFrame, text="Update Asset/Worksite", width=20, height=5,font=20,
+               command=lambda: parent.switch_frame(UpdatePage)).grid(row=13,column=12,pady=20)
+        Button(mainFrame, text="Delete Asset/Worksite", width=20, height=5,font=20,
+               command=lambda: parent.switch_frame(DeletePage)).grid(row=13,column=20)
         
 class AddAssetPage(Frame):
     def __init__(self, parent):
@@ -79,6 +88,31 @@ class AddAssetPage(Frame):
         Label(topFrame, text="Add Asset Page",font=20,bg="#9ed1e1",width=100).pack(side="left",fill="y")
         Button(topFrame, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
+        
+        # Establish a 32x18 grid. Each spot represents 40px.
+        mainFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
+        mainFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
+
+        # User Entry widgets
+        Label(mainFrame,text="Asset Name:",font=20,bg="#9ed1e1",justify="right").grid(row=0,column=0)
+        userEntry1 = Entry(mainFrame,font=20,relief=RIDGE,width=50)
+        userEntry1.grid(row=0,column=1)
+        Label(mainFrame,text="Asset Type:",font=20,bg="#9ed1e1",justify="right").grid(row=1,column=0)
+        userEntry2 = Entry(mainFrame,font=20,relief=RIDGE,width=50)
+        userEntry2.grid(row=1,column=1)
+        Label(mainFrame,text="Asset Model No.:",font=20,bg="#9ed1e1",justify="right").grid(row=2,column=0)
+        userEntry3 = Entry(mainFrame,font=20,relief=RIDGE,width=50)
+        userEntry3.grid(row=2,column=1)
+        Label(mainFrame,text="Purchase Date:",font=20,bg="#9ed1e1",justify="right").grid(row=3,column=0)
+        userEntry4 = Entry(mainFrame,font=20,relief=RIDGE,width=50)
+        userEntry4.grid(row=3,column=1)
+        Label(mainFrame,text="Asset Asset:",font=20,bg="#9ed1e1",justify="right").grid(row=4,column=0)
+        userEntry5 = Entry(mainFrame,font=20,relief=RIDGE,width=50)
+        userEntry5.grid(row=4,column=1)
+        
+        # Button to submit Changes
+        submitBtn = Button(mainFrame, text="Add Asset", font=20)
+        submitBtn.grid(row=5,column=1)
         
 class AddWorksitePage(Frame):
     def __init__(self, parent):
