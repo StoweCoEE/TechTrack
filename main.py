@@ -152,7 +152,7 @@ class AddWorksitePage(Frame):
         self.config(background="#bcdfeb")
         # Create frames for header and content
         headerFrame = Frame(self, bg="#9ed1e1")
-        contentFrame = Frame(self, bg="#9ed1e1")
+        contentFrame = Frame(self, bg="#bcdfeb")
         # grid propagate so we can force frame sizes
         headerFrame.grid_propagate(0)
         contentFrame.grid_propagate(0)
@@ -183,6 +183,27 @@ class AddWorksitePage(Frame):
         Label(headerFrame, text="Add a Worksite",font=('Arial',36,'bold'),bg="#9ed1e1",width=33).pack(side="left")
         Button(headerFrame, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
+        
+        # Create and Place Labels and User-Entry Widgets
+        Label(contentFrame,text="Order ID:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20).grid(row=1,column=0)
+        userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        userEntry1.grid(row=1,column=1,columnspan=3,sticky=W)
+        Label(contentFrame,text="Worksite Type:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=2,column=0)
+        userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        userEntry2.grid(row=2,column=1,columnspan=3,sticky=W)
+        Label(contentFrame,text="Worksite Address:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=3,column=0)
+        userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        userEntry3.grid(row=3,column=1,columnspan=3,sticky=W)
+        Label(contentFrame,text="Worksite City:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=4,column=0)
+        userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        userEntry4.grid(row=4,column=1,columnspan=3,sticky=W)
+        Label(contentFrame,text="Worksite Zip:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=5,column=0)
+        userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        userEntry5.grid(row=5,column=1,columnspan=3,sticky=W)
+        
+        # Button to submit Changes
+        submitBtn = Button(contentFrame, text="Add Worksite", font=('Arial',20))
+        submitBtn.grid(row=7,column=0,columnspan=7)
         
 class UpdatePage(Frame):
     def __init__(self, parent):
