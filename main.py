@@ -7,16 +7,17 @@ import sqlite3
 ## SQLITE DATABASE INITIATION (TO BE ADDED LATER)
 ##
 
-#dataBase = sqlite3.connect('TechTrackDB')
-#cursor = dataBase.cursor()
-
+db = sqlite3.connect('TechTrackDB.db')
+cursor = db.cursor()
+db.commit()
+db.close()
 
 ##
 ## WIDGET FUNCTION DEFINITIONS
 ##
-
-def EntitySearchClick():
-    print("EntitySearchClick")
+def EntitySearchClick(userEntry):
+    entryData = userEntry.get()
+    print(entryData)
 
 def AssetSearchClick():
     print("AssetSearchClick")
@@ -247,8 +248,9 @@ class AddWorksitePage(Frame):
         submitBtn.grid(row=7,column=0,columnspan=7)
         
 class UpdatePage(Frame):
+    
     def __init__(self, parent):
-        super().__init__(parent)
+        Frame.__init__(self, parent)
         
         ##
         ## LAYOUT SETTINGS
@@ -292,11 +294,12 @@ class UpdatePage(Frame):
         
         # Search Bar and Button
         Label(contentFrame,text="Asset/Worksite ID:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20).grid(row=0,column=0)
-        searchEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=38)
-        searchEntry1.grid(row=0,column=1,columnspan=3,sticky=W)
-        searchBtn = Button(contentFrame, text="Search", font=('Arial',20))
-        searchBtn.config(command=EntitySearchClick)
-        searchBtn.grid(row=0,column=4, sticky=W)
+        searchEntity1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=38)
+        searchEntity1.insert(0,'(Enter Asset/Worksite ID)')
+        searchEntity1.bind("<FocusIn>", lambda args: searchEntity1.delete('0', 'end'))
+        searchEntity1.grid(row=0,column=1,columnspan=3,sticky=W)
+        searchEntityBtn = Button(contentFrame, text="Search", font=('Arial',20),command=lambda: EntitySearchClick(searchEntity1))
+        searchEntityBtn.grid(row=0,column=4, sticky=W)
 
 class DeletePage(Frame):
     def __init__(self, parent):
