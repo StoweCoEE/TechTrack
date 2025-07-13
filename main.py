@@ -4,26 +4,42 @@ import sqlite3
 
 
 ##
-## SQLITE DATABASE INITIATION (TO BE ADDED LATER)
+## SQLITE DATABASE INITIATION
 ##
 
 db = sqlite3.connect('TechTrackDB.db')
 cursor = db.cursor()
+
+assetTableCreation = """CREATE TABLE IF NOT EXISTS asset(
+               assetID INTEGER PRIMARY KEY,
+               asset_type INTEGER,
+               asset_name TEXT,
+               asset_cost INTEGER,
+               asset_purchase_date INTEGER,
+               asset_model_no INTEGER);"""
+
+worksiteTableCreation = """CREATE TABLE IF NOT EXISTS worksite(
+               worksiteID INTEGER PRIMARY KEY,
+               orderID INTEGER,
+               worksite_type INTEGER,
+               worksite_address TEXT,
+               worksite_city TEXT,
+               worksite_zip INTEGER);"""
+
+assignmentTableCreation = """CREATE TABLE IF NOT EXISTS assignment(
+               assignmentID INTEGER PRIMARY KEY,
+               assetID INTEGER,
+               worksiteID INTEGER,
+               FOREIGN KEY(assetID) REFERENCES asset(assetID)
+               FOREIGN KEY(worksiteID) REFERENCES worksite(worksiteID));"""
+
+cursor.execute(assetTableCreation)
+cursor.execute(worksiteTableCreation)
+cursor.execute(assignmentTableCreation)
+
 db.commit()
 db.close()
 
-##
-## WIDGET FUNCTION DEFINITIONS
-##
-def EntitySearchClick(userEntry):
-    entryData = userEntry.get()
-    print(entryData)
-
-def AssetSearchClick():
-    print("AssetSearchClick")
-
-def WorksiteSearchClick():
-    print("WorksiteSearchClick")
 
 class TechTrack(Tk):
     def __init__(self):
@@ -248,7 +264,6 @@ class AddWorksitePage(Frame):
         submitBtn.grid(row=7,column=0,columnspan=7)
         
 class UpdatePage(Frame):
-    
     def __init__(self, parent):
         Frame.__init__(self, parent)
         
@@ -298,8 +313,17 @@ class UpdatePage(Frame):
         searchEntity1.insert(0,'(Enter Asset/Worksite ID)')
         searchEntity1.bind("<FocusIn>", lambda args: searchEntity1.delete('0', 'end'))
         searchEntity1.grid(row=0,column=1,columnspan=3,sticky=W)
-        searchEntityBtn = Button(contentFrame, text="Search", font=('Arial',20),command=lambda: EntitySearchClick(searchEntity1))
+        searchEntityBtn = Button(contentFrame, text="Search", font=('Arial',20),command=lambda: EntitySearchClick())
         searchEntityBtn.grid(row=0,column=4, sticky=W)
+
+
+        ##
+        ## WIDGET FUNCTION DEFINITIONS
+        ##  
+
+        def EntitySearchClick():
+            entryData = searchEntity1.get()
+            print(entryData)
 
 class DeletePage(Frame):
     def __init__(self, parent):
@@ -400,7 +424,15 @@ class ViewPage(Frame):
         viewAssetBtn = Button(contentFrame, text="View Assets", font=('Arial',20))
         viewAssetBtn.grid(row=0,column=0,columnspan=3)
         viewWorksiteBtn = Button(contentFrame, text="View Worksites", font=('Arial',20))
-        viewWorksiteBtn.grid(row=0,column=4,columnspan=3)
+        viewWorksiteBtn.grid(row=0,column=3,columnspan=3)
+
+        viewScroll = Scrollbar(contentFrame)
+        viewScroll.grid(row=1,column=5,sticky=NS)
+
+        dataList = Listbox(contentFrame, width=100, height=25, font=('Arial',12),yscrollcommand=viewScroll.set)
+        dataList.grid(row=1,column=1,columnspan=4)
+
+        viewScroll.configure(command=lambda: dataList.yview)
         
 if __name__ == "__main__":
     tt = TechTrack()
