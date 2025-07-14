@@ -89,6 +89,11 @@ class HomePage(Frame):
 class AddAssetPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        placeholder1 = "(Enter Asset Name)"
+        placeholder2 = "(Enter Asset Type)"
+        placeholder3 = "(Enter Asset Model Number)"
+        placeholder4 = "(Enter Asset Purchase Date)"
+        placeholder5 = "(Enter Asset Cost)"
 
         def addAssetClick(entry1, entry2, entry3, entry4, entry5):
             assetName = entry1.get()
@@ -96,16 +101,24 @@ class AddAssetPage(Frame):
             assetModelNo = entry3.get()
             assetPurchaseDate = entry4.get()
             assetCost = entry5.get()
-            if not (len(assetName) == 0) + (len(assetType) == 0) + (len(assetModelNo) == 0) + (len(assetPurchaseDate) == 0) + (len(assetCost) == 0):
-                database.addAsset(conn, assetType, assetName, assetCost, assetPurchaseDate, assetModelNo)
-                messagebox.showinfo("Success","Asset Added Successfully")
+
+            if (len(assetName) == 0 or len(assetType) == 0 or len(assetModelNo) == 0 or len(assetPurchaseDate) == 0 or len(assetCost) == 0):
+                messagebox.showerror("Error","Entry Data Was Missing")
+                userEntry1.delete(0,END)
+                userEntry2.delete(0,END)
+                userEntry3.delete(0,END)
+                userEntry4.delete(0,END)
+                userEntry5.delete(0,END)
+            elif (assetName == placeholder1 or assetType == placeholder2 or assetModelNo == placeholder3 or assetPurchaseDate == placeholder4 or assetCost == placeholder5):
+                messagebox.showerror("Error","Placeholder Text Entered")
                 userEntry1.delete(0,END)
                 userEntry2.delete(0,END)
                 userEntry3.delete(0,END)
                 userEntry4.delete(0,END)
                 userEntry5.delete(0,END)
             else:
-                messagebox.showerror("Error","Entry Data Was Missing")
+                database.addAsset(conn, assetType, assetName, assetCost, assetPurchaseDate, assetModelNo)
+                messagebox.showinfo("Success","Asset Added Successfully")
                 userEntry1.delete(0,END)
                 userEntry2.delete(0,END)
                 userEntry3.delete(0,END)
@@ -162,31 +175,31 @@ class AddAssetPage(Frame):
         Label(contentFrame,text="Asset Name:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20
               ).grid(row=1,column=0)
         userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable = assetName)
-        userEntry1.insert(0,'(Enter Asset Name)')
+        userEntry1.insert(0,placeholder1)
         userEntry1.bind("<FocusIn>", lambda args: userEntry1.delete('0', 'end'))
         userEntry1.grid(row=1,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Asset Type:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=2,column=0)
         userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetType)
-        userEntry2.insert(0,'(Enter Asset Type)')
+        userEntry2.insert(0,placeholder2)
         userEntry2.bind("<FocusIn>", lambda args: userEntry2.delete('0', 'end'))
         userEntry2.grid(row=2,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Asset Model Number:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=3,column=0)
         userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetModelNo)
-        userEntry3.insert(0,'(Enter Asset Model Number)')
+        userEntry3.insert(0,placeholder3)
         userEntry3.bind("<FocusIn>", lambda args: userEntry3.delete('0', 'end'))
         userEntry3.grid(row=3,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Purchase Date:",font=('Arial',26),bg="#bcdfeb",justify="right"
+        Label(contentFrame,text="Purchase Date (YYYYMMDD):",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=4,column=0)
         userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetPurchaseDate)
-        userEntry4.insert(0,'(Enter Asset Purchase Date)')
+        userEntry4.insert(0,placeholder4)
         userEntry4.bind("<FocusIn>", lambda args: userEntry4.delete('0', 'end'))
         userEntry4.grid(row=4,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Asset Cost:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=5,column=0)
         userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetCost)
-        userEntry5.insert(0,'(Enter Asset Cost)')
+        userEntry5.insert(0,placeholder5)
         userEntry5.bind("<FocusIn>", lambda args: userEntry5.delete('0', 'end'))
         userEntry5.grid(row=5,column=1,columnspan=3,sticky=W)
         
