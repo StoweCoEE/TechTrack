@@ -1,72 +1,9 @@
 from tkinter import *
 from PIL import ImageTk, Image
-import sqlite3
+import database
 
-##============================================================
-## SQLITE DATABASE INITIATION
-##
-
-# Create/Open Database File
-db = sqlite3.connect('TechTrackDB.db')
-cursor = db.cursor()
-
-# Create Asset Table
-assetTableCreation = """CREATE TABLE IF NOT EXISTS asset(
-               assetID INTEGER PRIMARY KEY,
-               asset_type INTEGER,
-               asset_name TEXT,
-               asset_cost INTEGER,
-               asset_purchase_date INTEGER,
-               asset_model_no INTEGER);"""
-cursor.execute(assetTableCreation)
-
-# Create Worksite Table
-worksiteTableCreation = """CREATE TABLE IF NOT EXISTS worksite(
-               worksiteID INTEGER PRIMARY KEY,
-               orderID INTEGER,
-               worksite_type INTEGER,
-               worksite_address TEXT,
-               worksite_city TEXT,
-               worksite_zip INTEGER);"""
-cursor.execute(worksiteTableCreation)
-
-# Create Assignment Table
-assignmentTableCreation = """CREATE TABLE IF NOT EXISTS assignment(
-               assignmentID INTEGER PRIMARY KEY,
-               assetID INTEGER,
-               worksiteID INTEGER,
-               FOREIGN KEY(assetID) REFERENCES asset(assetID)
-               FOREIGN KEY(worksiteID) REFERENCES worksite(worksiteID));"""
-cursor.execute(assignmentTableCreation)
-
-# Commit And Close Database Initialization process
-db.commit()
-db.close()
-
-##============================================================
-## SQLite Functions
-##
-
-def addAsset():
-    pass
-
-def addWorksite():
-    pass
-
-def addAssignment():
-    pass
-
-def updateEntity():
-    pass
-
-def deleteEntity():
-    pass
-
-def viewAssets():
-    pass
-
-def viewWorksites():
-    pass
+connection = database.connect()
+database.initialize(connection)
 
 ##============================================================
 ## TKNINTER WINDOW CLASS
@@ -468,7 +405,11 @@ class ViewPage(Frame):
         dataList.grid(row=1,column=1,columnspan=4)
 
         viewScroll.configure(command=lambda: dataList.yview)
-        
+
+##============================================================
+## TKINTER WINDOW MAINLOOP
+##
+
 if __name__ == "__main__":
     tt = TechTrack()
     tt = mainloop()
