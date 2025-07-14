@@ -1,9 +1,10 @@
 from tkinter import *
+from tkinter import messagebox
 from PIL import ImageTk, Image
 import database
 
-connection = database.connect()
-database.initialize(connection)
+conn = database.connect()
+database.initialize(conn)
 
 ##============================================================
 ## TKNINTER WINDOW CLASS
@@ -88,6 +89,28 @@ class HomePage(Frame):
 class AddAssetPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+
+        def addAssetClick(entry1, entry2, entry3, entry4, entry5):
+            assetName = entry1.get()
+            assetType = entry2.get()
+            assetModelNo = entry3.get()
+            assetPurchaseDate = entry4.get()
+            assetCost = entry5.get()
+            if not (len(assetName) == 0) + (len(assetType) == 0) + (len(assetModelNo) == 0) + (len(assetPurchaseDate) == 0) + (len(assetCost) == 0):
+                database.addAsset(conn, assetType, assetName, assetCost, assetPurchaseDate, assetModelNo)
+                messagebox.showinfo("Success","Asset Added Successfully")
+                userEntry1.delete(0,END)
+                userEntry2.delete(0,END)
+                userEntry3.delete(0,END)
+                userEntry4.delete(0,END)
+                userEntry5.delete(0,END)
+            else:
+                messagebox.showerror("Error","Entry Data Was Missing")
+                userEntry1.delete(0,END)
+                userEntry2.delete(0,END)
+                userEntry3.delete(0,END)
+                userEntry4.delete(0,END)
+                userEntry5.delete(0,END)
         
         ##
         ## LAYOUT SETTINGS
@@ -128,36 +151,47 @@ class AddAssetPage(Frame):
         Label(headerFrame, text="Add an Asset",font=('Arial',36,'bold'),bg="#9ed1e1",width=33).pack(side="left")
         Button(headerFrame, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
+        
+        assetName = ''
+        assetType = ''
+        assetModelNo = ''
+        assetPurchaseDate = ''
+        assetCost = ''
 
         # Create and Place Labels and User-Entry Widgets
-        Label(contentFrame,text="Asset Name:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20).grid(row=1,column=0)
-        userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        Label(contentFrame,text="Asset Name:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20
+              ).grid(row=1,column=0)
+        userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable = assetName)
         userEntry1.insert(0,'(Enter Asset Name)')
         userEntry1.bind("<FocusIn>", lambda args: userEntry1.delete('0', 'end'))
         userEntry1.grid(row=1,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Asset Type:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=2,column=0)
-        userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        Label(contentFrame,text="Asset Type:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=2,column=0)
+        userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetType)
         userEntry2.insert(0,'(Enter Asset Type)')
         userEntry2.bind("<FocusIn>", lambda args: userEntry2.delete('0', 'end'))
         userEntry2.grid(row=2,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Asset Model Number:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=3,column=0)
-        userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        Label(contentFrame,text="Asset Model Number:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=3,column=0)
+        userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetModelNo)
         userEntry3.insert(0,'(Enter Asset Model Number)')
         userEntry3.bind("<FocusIn>", lambda args: userEntry3.delete('0', 'end'))
         userEntry3.grid(row=3,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Purchase Date:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=4,column=0)
-        userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        Label(contentFrame,text="Purchase Date:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=4,column=0)
+        userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetPurchaseDate)
         userEntry4.insert(0,'(Enter Asset Purchase Date)')
         userEntry4.bind("<FocusIn>", lambda args: userEntry4.delete('0', 'end'))
         userEntry4.grid(row=4,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Asset Cost:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=5,column=0)
-        userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
+        Label(contentFrame,text="Asset Cost:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=5,column=0)
+        userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetCost)
         userEntry5.insert(0,'(Enter Asset Cost)')
         userEntry5.bind("<FocusIn>", lambda args: userEntry5.delete('0', 'end'))
         userEntry5.grid(row=5,column=1,columnspan=3,sticky=W)
         
         # Button to submit Changes
-        submitBtn = Button(contentFrame, text="Add Asset", font=('Arial',20))
+        submitBtn = Button(contentFrame, text="Add Asset", font=('Arial',20),command=lambda: addAssetClick(userEntry1, userEntry2, userEntry3, userEntry4, userEntry5))
         submitBtn.grid(row=7,column=0,columnspan=7)
         
 class AddWorksitePage(Frame):
@@ -200,32 +234,38 @@ class AddWorksitePage(Frame):
         iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
 
         #banner label and return button
-        Label(headerFrame, text="Add a Worksite",font=('Arial',36,'bold'),bg="#9ed1e1",width=33).pack(side="left")
+        Label(headerFrame, text="Add a Worksite",font=('Arial',36,'bold'),bg="#9ed1e1",width=33
+              ).pack(side="left")
         Button(headerFrame, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
         # Create and Place Labels and User-Entry Widgets
-        Label(contentFrame,text="Order ID:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20).grid(row=1,column=0)
+        Label(contentFrame,text="Order ID:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20
+              ).grid(row=1,column=0)
         userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry1.insert(0,'(Enter Worksite Name)')
         userEntry1.bind("<FocusIn>", lambda args: userEntry1.delete('0', 'end'))
         userEntry1.grid(row=1,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Worksite Type:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=2,column=0)
+        Label(contentFrame,text="Worksite Type:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=2,column=0)
         userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry2.insert(0,'(Enter Worksite Type)')
         userEntry2.bind("<FocusIn>", lambda args: userEntry2.delete('0', 'end'))
         userEntry2.grid(row=2,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Worksite Address:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=3,column=0)
+        Label(contentFrame,text="Worksite Address:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=3,column=0)
         userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry3.insert(0,'(Enter Worksite Address)')
         userEntry3.bind("<FocusIn>", lambda args: userEntry3.delete('0', 'end'))
         userEntry3.grid(row=3,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Worksite City:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=4,column=0)
+        Label(contentFrame,text="Worksite City:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=4,column=0)
         userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry4.insert(0,'(Enter Worksite City)')
         userEntry4.bind("<FocusIn>", lambda args: userEntry4.delete('0', 'end'))
         userEntry4.grid(row=4,column=1,columnspan=3,sticky=W)
-        Label(contentFrame,text="Worksite Zip:",font=('Arial',26),bg="#bcdfeb",justify="right").grid(row=5,column=0)
+        Label(contentFrame,text="Worksite Zip:",font=('Arial',26),bg="#bcdfeb",justify="right"
+              ).grid(row=5,column=0)
         userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry5.insert(0,'(Enter Worksite Zip Code)')
         userEntry5.bind("<FocusIn>", lambda args: userEntry5.delete('0', 'end'))
