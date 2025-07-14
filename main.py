@@ -76,15 +76,17 @@ class HomePage(Frame):
 
         # Create and Place Navigation Buttons
         Button(contentFrame, text="View Assets/Worksites", width=20, height=3, font=('Arial',16,'bold'),
-               command=lambda: parent.switch_frame(ViewPage)).grid(row=1,column=5)
+               command=lambda: parent.switch_frame(ViewPage)).grid(row=5,column=7)
         Button(contentFrame, text="Add Asset", width=20, height=3,font=('Arial',16,'bold'),
-               command=lambda: parent.switch_frame(AddAssetPage)).grid(row=3,column=2,sticky=E)
+               command=lambda: parent.switch_frame(AddAssetPage)).grid(row=1,column=3)
         Button(contentFrame, text="Add Worksite", width=20, height=3,font=('Arial',16,'bold'),
-               command=lambda: parent.switch_frame(AddWorksitePage)).grid(row=3,column=8,sticky=W)
+               command=lambda: parent.switch_frame(AddWorksitePage)).grid(row=1,column=7)
         Button(contentFrame, text="Update Asset/Worksite", width=20, height=3,font=('Arial',16,'bold'),
-               command=lambda: parent.switch_frame(UpdatePage)).grid(row=5,column=2,sticky=E)
+               command=lambda: parent.switch_frame(UpdatePage)).grid(row=3,column=3)
         Button(contentFrame, text="Delete Asset/Worksite", width=20, height=3,font=('Arial',16,'bold'),
-               command=lambda: parent.switch_frame(DeletePage)).grid(row=5,column=8,sticky=W)
+               command=lambda: parent.switch_frame(DeletePage)).grid(row=3,column=7)
+        Button(contentFrame, text="Add Assignment", width=20, height=3,font=('Arial',16,'bold'),
+               command=lambda: parent.switch_frame(AssignmentPage)).grid(row=5,column=3)
         
 class AddAssetPage(Frame):
     def __init__(self, parent):
@@ -493,6 +495,50 @@ class ViewPage(Frame):
         dataList.grid(row=1,column=1,columnspan=4)
 
         viewScroll.configure(command=lambda: dataList.yview)
+
+class AssignmentPage(Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        
+        ##
+        ## LAYOUT SETTINGS
+        ##
+
+        # Set background color for main frame
+        self.config(background="#bcdfeb")
+        # Create frames for header and content
+        headerFrame = Frame(self, bg="#9ed1e1")
+        contentFrame = Frame(self, bg="#9ed1e1")
+        # grid propagate so we can force frame sizes
+        headerFrame.grid_propagate(0)
+        contentFrame.grid_propagate(0)
+        # configure frame sizes
+        headerFrame.config(width=1220,height=100)
+        contentFrame.config(width=1220,height=600)
+        # pack frames onto main frame
+        headerFrame.pack(side="top")
+        contentFrame.pack(side="bottom")
+        # Establish grid for content frame
+        contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
+        contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
+
+
+        ##
+        ## WIDGET SETTINGS
+        ##
+
+        # banner icon creation
+        global tt_icon_tk
+        tt_icon = Image.open('images\\techtrack_icon.png').resize((100,100))
+        tt_icon_tk = ImageTk.PhotoImage(tt_icon)
+        iconcanvas = Canvas(headerFrame, bg="#9ed1e1", bd=0, highlightthickness=0,height=100,width=100)
+        iconcanvas.pack(side="left")
+        iconcanvas.create_image(0, 0, image=tt_icon_tk, anchor=NW)
+
+        #banner label and return button
+        Label(headerFrame, text="Entity Assignments",font=('Arial',36,'bold'),bg="#9ed1e1",width=33).pack(side="left")
+        Button(headerFrame, text="Return to Home Page",
+               command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
 
 ##============================================================
 ## TKINTER WINDOW MAINLOOP
