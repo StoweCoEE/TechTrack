@@ -210,6 +210,41 @@ class AddAssetPage(Frame):
 class AddWorksitePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+        placeholder1 = "(Enter Order ID)"
+        placeholder2 = "(Enter Worksite Type)"
+        placeholder3 = "(Enter Worksite Address)"
+        placeholder4 = "(Enter Worksite City)"
+        placeholder5 = "(Enter Worksite Zip Code)"
+
+        def addWorksiteClick(entry1, entry2, entry3, entry4, entry5):
+            orderID = entry1.get()
+            worksiteType = entry2.get()
+            worksiteAddress = entry3.get()
+            worksiteCity = entry4.get()
+            worksiteZip = entry5.get()
+
+            if (len(orderID) == 0 or len(worksiteType) == 0 or len(worksiteAddress) == 0 or len(worksiteCity) == 0 or len(worksiteZip) == 0):
+                messagebox.showerror("Error","Entry Data Was Missing")
+                userEntry1.delete(0,END)
+                userEntry2.delete(0,END)
+                userEntry3.delete(0,END)
+                userEntry4.delete(0,END)
+                userEntry5.delete(0,END)
+            elif (orderID == placeholder1 or worksiteType == placeholder2 or worksiteAddress == placeholder3 or worksiteCity == placeholder4 or worksiteZip == placeholder5):
+                messagebox.showerror("Error","Placeholder Text Entered")
+                userEntry1.delete(0,END)
+                userEntry2.delete(0,END)
+                userEntry3.delete(0,END)
+                userEntry4.delete(0,END)
+                userEntry5.delete(0,END)
+            else:
+                database.addAsset(conn, orderID, worksiteType, worksiteAddress, worksiteCity, worksiteZip)
+                messagebox.showinfo("Success","Asset Added Successfully")
+                userEntry1.delete(0,END)
+                userEntry2.delete(0,END)
+                userEntry3.delete(0,END)
+                userEntry4.delete(0,END)
+                userEntry5.delete(0,END)
         
         ##
         ## LAYOUT SETTINGS
@@ -256,36 +291,36 @@ class AddWorksitePage(Frame):
         Label(contentFrame,text="Order ID:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20
               ).grid(row=1,column=0)
         userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
-        userEntry1.insert(0,'(Enter Worksite Name)')
+        userEntry1.insert(0,placeholder1)
         userEntry1.bind("<FocusIn>", lambda args: userEntry1.delete('0', 'end'))
         userEntry1.grid(row=1,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Worksite Type:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=2,column=0)
         userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
-        userEntry2.insert(0,'(Enter Worksite Type)')
+        userEntry2.insert(0,placeholder2)
         userEntry2.bind("<FocusIn>", lambda args: userEntry2.delete('0', 'end'))
         userEntry2.grid(row=2,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Worksite Address:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=3,column=0)
         userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
-        userEntry3.insert(0,'(Enter Worksite Address)')
+        userEntry3.insert(0,placeholder3)
         userEntry3.bind("<FocusIn>", lambda args: userEntry3.delete('0', 'end'))
         userEntry3.grid(row=3,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Worksite City:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=4,column=0)
         userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
-        userEntry4.insert(0,'(Enter Worksite City)')
+        userEntry4.insert(0,placeholder4)
         userEntry4.bind("<FocusIn>", lambda args: userEntry4.delete('0', 'end'))
         userEntry4.grid(row=4,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Worksite Zip:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=5,column=0)
         userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
-        userEntry5.insert(0,'(Enter Worksite Zip Code)')
+        userEntry5.insert(0,placeholder5)
         userEntry5.bind("<FocusIn>", lambda args: userEntry5.delete('0', 'end'))
         userEntry5.grid(row=5,column=1,columnspan=3,sticky=W)
         
         # Button to submit Changes
-        submitBtn = Button(contentFrame, text="Add Worksite", font=('Arial',20))
+        submitBtn = Button(contentFrame, text="Add Worksite", font=('Arial',20),command=lambda: addWorksiteClick(userEntry1, userEntry2, userEntry3, userEntry4, userEntry5))
         submitBtn.grid(row=7,column=0,columnspan=7)
         
 class UpdatePage(Frame):

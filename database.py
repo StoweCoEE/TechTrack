@@ -5,7 +5,7 @@ import sqlite3
 ##
 
 assetTableCreation = """CREATE TABLE IF NOT EXISTS asset(
-               assetID INTEGER PRIMARY KEY,
+               asset_ID INTEGER PRIMARY KEY,
                asset_type INTEGER,
                asset_name TEXT,
                asset_cost INTEGER,
@@ -13,21 +13,23 @@ assetTableCreation = """CREATE TABLE IF NOT EXISTS asset(
                asset_model_no INTEGER);"""
 
 worksiteTableCreation = """CREATE TABLE IF NOT EXISTS worksite(
-               worksiteID INTEGER PRIMARY KEY,
-               orderID INTEGER,
+               worksite_ID INTEGER PRIMARY KEY,
+               order_ID INTEGER,
                worksite_type INTEGER,
                worksite_address TEXT,
                worksite_city TEXT,
                worksite_zip INTEGER);"""
 
 assignmentTableCreation = """CREATE TABLE IF NOT EXISTS assignment(
-               assignmentID INTEGER PRIMARY KEY,
-               assetID INTEGER,
-               worksiteID INTEGER,
-               FOREIGN KEY(assetID) REFERENCES asset(assetID)
-               FOREIGN KEY(worksiteID) REFERENCES worksite(worksiteID));"""
+               assignment_ID INTEGER PRIMARY KEY,
+               asset_ID INTEGER,
+               worksite_ID INTEGER,
+               FOREIGN KEY(asset_ID) REFERENCES asset(asset_ID)
+               FOREIGN KEY(worksite_ID) REFERENCES worksite(worksite_ID));"""
 
 assetData = "INSERT INTO asset(asset_type, asset_name, asset_cost, asset_purchase_date, asset_model_no) VALUES (?,?,?,?,?);"
+
+worksiteData = "INSERT INTO worksite(order_ID, worksite_type, worksite_address, worksite_city, worksite_zip) VALUES (?,?,?,?,?);"
 
 ##============================================================
 ## SQLITE DATABASE INITIATION
@@ -50,8 +52,9 @@ def addAsset(connection, asset_type, asset_name, asset_cost, asset_purchase_date
     with connection:
         connection.execute(assetData, (asset_type, asset_name, asset_cost, asset_purchase_date, asset_model_no))
 
-def addWorksite():
-    pass
+def addWorksite(connection, order_ID, worksite_type, worksite_address, worksite_city, worksite_zip):
+    with connection:
+        connection.execute(assetData, (order_ID, worksite_type, worksite_address, worksite_city, worksite_zip))
 
 def addAssignment():
     pass
