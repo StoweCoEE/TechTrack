@@ -2,14 +2,15 @@ from tkinter import *
 from PIL import ImageTk, Image
 import sqlite3
 
-
-##
+##============================================================
 ## SQLITE DATABASE INITIATION
 ##
 
+# Create/Open Database File
 db = sqlite3.connect('TechTrackDB.db')
 cursor = db.cursor()
 
+# Create Asset Table
 assetTableCreation = """CREATE TABLE IF NOT EXISTS asset(
                assetID INTEGER PRIMARY KEY,
                asset_type INTEGER,
@@ -17,7 +18,9 @@ assetTableCreation = """CREATE TABLE IF NOT EXISTS asset(
                asset_cost INTEGER,
                asset_purchase_date INTEGER,
                asset_model_no INTEGER);"""
+cursor.execute(assetTableCreation)
 
+# Create Worksite Table
 worksiteTableCreation = """CREATE TABLE IF NOT EXISTS worksite(
                worksiteID INTEGER PRIMARY KEY,
                orderID INTEGER,
@@ -25,21 +28,49 @@ worksiteTableCreation = """CREATE TABLE IF NOT EXISTS worksite(
                worksite_address TEXT,
                worksite_city TEXT,
                worksite_zip INTEGER);"""
+cursor.execute(worksiteTableCreation)
 
+# Create Assignment Table
 assignmentTableCreation = """CREATE TABLE IF NOT EXISTS assignment(
                assignmentID INTEGER PRIMARY KEY,
                assetID INTEGER,
                worksiteID INTEGER,
                FOREIGN KEY(assetID) REFERENCES asset(assetID)
                FOREIGN KEY(worksiteID) REFERENCES worksite(worksiteID));"""
-
-cursor.execute(assetTableCreation)
-cursor.execute(worksiteTableCreation)
 cursor.execute(assignmentTableCreation)
 
+# Commit And Close Database Initialization process
 db.commit()
 db.close()
 
+##============================================================
+## SQLite Functions
+##
+
+def addAsset():
+    pass
+
+def addWorksite():
+    pass
+
+def addAssignment():
+    pass
+
+def updateEntity():
+    pass
+
+def deleteEntity():
+    pass
+
+def viewAssets():
+    pass
+
+def viewWorksites():
+    pass
+
+##============================================================
+## TKNINTER WINDOW CLASS
+##
 
 class TechTrack(Tk):
     def __init__(self):
@@ -61,6 +92,10 @@ class TechTrack(Tk):
             self._frame.destroy()
         self._frame = new_frame
         self._frame.pack()
+
+##============================================================
+## TKINTER FRAME CLASSES
+##
 
 class HomePage(Frame):
     def __init__(self, parent):
