@@ -39,7 +39,7 @@ class HomePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        ##
+        ##============================================================
         ## LAYOUT SETTINGS
         ##
 
@@ -62,7 +62,7 @@ class HomePage(Frame):
         contentFrame.rowconfigure((0,1,2,3,4,5,6),weight=1)
 
 
-        ##
+        ##============================================================
         ## WIDGET SETTINGS
         ##
 
@@ -91,11 +91,16 @@ class HomePage(Frame):
 class AddAssetPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+
         placeholder1 = "(Enter Asset Name)"
         placeholder2 = "(Enter Asset Type)"
         placeholder3 = "(Enter Asset Model Number)"
         placeholder4 = "(Enter Asset Purchase Date)"
         placeholder5 = "(Enter Asset Cost)"
+
+        ##============================================================
+        ## WIDGET FUNCTION SETTINGS
+        ##
 
         def addAssetClick(entry1, entry2, entry3, entry4, entry5):
             assetName = entry1.get()
@@ -127,7 +132,7 @@ class AddAssetPage(Frame):
                 userEntry4.delete(0,END)
                 userEntry5.delete(0,END)
         
-        ##
+        ##============================================================
         ## LAYOUT SETTINGS
         ##
 
@@ -149,8 +154,7 @@ class AddAssetPage(Frame):
         contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
         contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
-
-        ##
+        ##============================================================
         ## WIDGET SETTINGS
         ##
 
@@ -167,40 +171,34 @@ class AddAssetPage(Frame):
         Button(headerFrame, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
-        assetName = ''
-        assetType = ''
-        assetModelNo = ''
-        assetPurchaseDate = ''
-        assetCost = ''
-
         # Create and Place Labels and User-Entry Widgets
         Label(contentFrame,text="Asset Name:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20
               ).grid(row=1,column=0)
-        userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable = assetName)
+        userEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry1.insert(0,placeholder1)
         userEntry1.bind("<FocusIn>", lambda args: userEntry1.delete('0', 'end'))
         userEntry1.grid(row=1,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Asset Type:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=2,column=0)
-        userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetType)
+        userEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry2.insert(0,placeholder2)
         userEntry2.bind("<FocusIn>", lambda args: userEntry2.delete('0', 'end'))
         userEntry2.grid(row=2,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Asset Model Number:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=3,column=0)
-        userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetModelNo)
+        userEntry3 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry3.insert(0,placeholder3)
         userEntry3.bind("<FocusIn>", lambda args: userEntry3.delete('0', 'end'))
         userEntry3.grid(row=3,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Purchase Date (YYYYMMDD):",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=4,column=0)
-        userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetPurchaseDate)
+        userEntry4 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry4.insert(0,placeholder4)
         userEntry4.bind("<FocusIn>", lambda args: userEntry4.delete('0', 'end'))
         userEntry4.grid(row=4,column=1,columnspan=3,sticky=W)
         Label(contentFrame,text="Asset Cost:",font=('Arial',26),bg="#bcdfeb",justify="right"
               ).grid(row=5,column=0)
-        userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50,textvariable=assetCost)
+        userEntry5 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=50)
         userEntry5.insert(0,placeholder5)
         userEntry5.bind("<FocusIn>", lambda args: userEntry5.delete('0', 'end'))
         userEntry5.grid(row=5,column=1,columnspan=3,sticky=W)
@@ -212,11 +210,16 @@ class AddAssetPage(Frame):
 class AddWorksitePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+
         placeholder1 = "(Enter Order ID)"
         placeholder2 = "(Enter Worksite Type)"
         placeholder3 = "(Enter Worksite Address)"
         placeholder4 = "(Enter Worksite City)"
         placeholder5 = "(Enter Worksite Zip Code)"
+
+        ##============================================================
+        ## WIDGET FUNCTION SETTINGS
+        ##
 
         def addWorksiteClick(entry1, entry2, entry3, entry4, entry5):
             orderID = entry1.get()
@@ -248,7 +251,7 @@ class AddWorksitePage(Frame):
                 userEntry4.delete(0,END)
                 userEntry5.delete(0,END)
         
-        ##
+        ##============================================================
         ## LAYOUT SETTINGS
         ##
 
@@ -270,8 +273,7 @@ class AddWorksitePage(Frame):
         contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
         contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
-
-        ##
+        ##============================================================
         ## WIDGET SETTINGS
         ##
 
@@ -329,7 +331,7 @@ class UpdatePage(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
         
-        ##
+        ##============================================================
         ## LAYOUT SETTINGS
         ##
 
@@ -351,8 +353,7 @@ class UpdatePage(Frame):
         contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
         contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
-
-        ##
+        ##============================================================
         ## WIDGET SETTINGS
         ##
 
@@ -375,22 +376,16 @@ class UpdatePage(Frame):
         searchEntity1.insert(0,'(Enter Asset/Worksite ID)')
         searchEntity1.bind("<FocusIn>", lambda args: searchEntity1.delete('0', 'end'))
         searchEntity1.grid(row=0,column=1,columnspan=3,sticky=W)
-        searchEntityBtn = Button(contentFrame, text="Search", font=('Arial',20),command=lambda: EntitySearchClick())
+        searchEntityBtn = Button(contentFrame, text="Search", font=('Arial',20))
         searchEntityBtn.grid(row=0,column=4, sticky=W)
-
-
-        ##
-        ## WIDGET FUNCTION DEFINITIONS
-        ##  
-
-        def EntitySearchClick():
-            entryData = searchEntity1.get()
-            print(entryData)
 
 class DeletePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        
+
+        ##============================================================
+        ## WIDGET FUNCTION SETTINGS
+        ##
 
         def searchOneAsset(userEntry):
             assetID = userEntry.get()
@@ -510,8 +505,7 @@ class DeletePage(Frame):
                     searchOneWorksiteBtn.config(state=ACTIVE)
                     searchEntry1.delete(0,END)
 
-        
-        ##
+        ##============================================================
         ## LAYOUT SETTINGS
         ##
 
@@ -538,8 +532,7 @@ class DeletePage(Frame):
         contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1,minsize=182)
         contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
-
-        ##
+        ##============================================================
         ## WIDGET SETTINGS
         ##
 
@@ -571,7 +564,7 @@ class ViewPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         
-        ##
+        ##============================================================
         ## LAYOUT SETTINGS
         ##
 
@@ -593,8 +586,7 @@ class ViewPage(Frame):
         contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
         contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
-
-        ##
+        ##============================================================
         ## WIDGET SETTINGS
         ##
 
@@ -629,7 +621,7 @@ class AssignmentPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
         
-        ##
+        ##============================================================
         ## LAYOUT SETTINGS
         ##
 
@@ -651,8 +643,7 @@ class AssignmentPage(Frame):
         contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
         contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
-
-        ##
+        ##============================================================
         ## WIDGET SETTINGS
         ##
 
