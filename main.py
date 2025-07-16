@@ -394,12 +394,13 @@ class DeletePage(Frame):
 
         def searchOneAsset(userEntry):
             assetID = userEntry.get()
-            print(assetID)
 
             if assetID == "":
                 messagebox.showerror("Missing Entry","Please Enter an Entity ID")
                 searchEntry1.delete(0,END)
             else:
+                foundLabel = Label(resultFrame,text="Asset Found:",font=('Arial',20),bg="#bcdfeb")
+                foundLabel.pack(pady=10)
                 searchResult=database.viewOneAsset(conn, assetID)
                 assetTree = ttk.Treeview(resultFrame,height=1)
                 assetTree['columns']=("ID","Name","Type","Model No.","Purchase Date","Cost")
@@ -422,42 +423,93 @@ class DeletePage(Frame):
                                  searchResult[3],searchResult[4],searchResult[5]))
                 assetTree.pack()
                 searchOneAssetBtn.config(state=DISABLED)
+                searchOneWorksiteBtn.config(state=DISABLED)
                 confirmAssetBtn = Button(resultFrame,text="Confirm Delete", font=('Arial',20),
-                                         command=lambda: deleteAsset(assetID,assetTree,confirmAssetBtn,resetAssetBtn))
-                confirmAssetBtn.pack()
+                                         command=lambda: deleteAsset(assetID,assetTree,confirmAssetBtn,resetAssetBtn,foundLabel))
+                confirmAssetBtn.pack(pady=10)
                 resetAssetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
-                                       command=lambda: resetAsset(assetID,assetTree,confirmAssetBtn,resetAssetBtn))
-                resetAssetBtn.pack()
+                                       command=lambda: resetAsset(assetTree,confirmAssetBtn,resetAssetBtn,foundLabel))
+                resetAssetBtn.pack(pady=10)
 
-            def deleteAsset(userEntry, tree, confrmButton,resetButton):
+            def deleteAsset(userEntry, tree, confrmButton,resetButton,label):
                     database.deleteAsset(conn, userEntry)
                     messagebox.showinfo("Delete Success","Asset Deleted Successfully")
                     tree.destroy()
                     confrmButton.destroy()
                     resetButton.destroy()
+                    label.destroy()
                     searchOneAssetBtn.config(state=ACTIVE)
+                    searchOneWorksiteBtn.config(state=ACTIVE)
                     searchEntry1.delete(0,END)
 
-            def resetAsset(userEntry, tree, confrmButton,resetButton):
+            def resetAsset(tree, confrmButton,resetButton,label):
                     tree.destroy()
                     confrmButton.destroy()
                     resetButton.destroy()
+                    label.destroy()
                     searchOneAssetBtn.config(state=ACTIVE)
+                    searchOneWorksiteBtn.config(state=ACTIVE)
                     searchEntry1.delete(0,END)
-            
 
-        def deleteWorksite(userEntry):
+        def searchOneWorksite(userEntry):
             worksiteID = userEntry.get()
-            searchResult = database.viewOneWorksite(conn,worksiteID)
-            print(searchResult)
-
+            
             if worksiteID == "":
                 messagebox.showerror("Missing Entry","Please Enter an Entity ID")
                 searchEntry1.delete(0,END)
             else:
-                database.deleteAsset(conn, worksiteID)
-                messagebox.showinfo("Delete Success","Worksite Deleted Successfully")
-                searchEntry1.delete(0,END)
+                foundLabel = Label(resultFrame,text="Worksite Found:",font=('Arial',20),bg="#bcdfeb")
+                foundLabel.pack(pady=10)
+                searchResult=database.viewOneWorksite(conn, worksiteID)
+                worksiteTree = ttk.Treeview(resultFrame,height=1)
+                worksiteTree['columns']=("ID","Order ID","Type","Address","City","Zip Code")
+                worksiteTree.column("#0",width=1)
+                worksiteTree.column("ID",width=10)
+                worksiteTree.column("Order ID",width=150,anchor="center")
+                worksiteTree.column("Type",width=150,anchor="center")
+                worksiteTree.column("Address",width=120,anchor="center")
+                worksiteTree.column("City",width=120,anchor="center")
+                worksiteTree.column("Zip Code",width=120,anchor="center")
+                worksiteTree.heading("#0", text="")
+                worksiteTree.heading("ID", text="ID")
+                worksiteTree.heading("Order ID", text="Order ID")
+                worksiteTree.heading("Type", text="Type")
+                worksiteTree.heading("Address", text="Address")
+                worksiteTree.heading("City", text="City")
+                worksiteTree.heading("Zip Code", text="Zip Code")
+                worksiteTree.insert(parent="",index='end',iid=1,text="val",values=(
+                                 searchResult[0],searchResult[1],searchResult[2],
+                                 searchResult[3],searchResult[4],searchResult[5]))
+                worksiteTree.pack()
+                searchOneAssetBtn.config(state=DISABLED)
+                searchOneWorksiteBtn.config(state=DISABLED)
+                confirmWorksiteBtn = Button(resultFrame,text="Confirm Delete", font=('Arial',20),
+                                         command=lambda: deleteWorksite(worksiteID,worksiteTree,confirmWorksiteBtn,resetWorksiteBtn,foundLabel))
+                confirmWorksiteBtn.pack(pady=10)
+                resetWorksiteBtn = Button(resultFrame,text="Reset", font=('Arial',20),
+                                       command=lambda: resetWorksite(worksiteTree,confirmWorksiteBtn,resetWorksiteBtn,foundLabel))
+                resetWorksiteBtn.pack(pady=10)
+
+                def deleteWorksite(userEntry, tree, confrmButton,resetButton,label):
+                    database.deleteWorksite(conn, userEntry)
+                    messagebox.showinfo("Delete Success","Worksite Deleted Successfully")
+                    tree.destroy()
+                    confrmButton.destroy()
+                    resetButton.destroy()
+                    label.destroy()
+                    searchOneAssetBtn.config(state=ACTIVE)
+                    searchOneWorksiteBtn.config(state=ACTIVE)
+                    searchEntry1.delete(0,END)
+
+                def resetWorksite(tree, confrmButton,resetButton,label):
+                    tree.destroy()
+                    confrmButton.destroy()
+                    resetButton.destroy()
+                    label.destroy()
+                    searchOneAssetBtn.config(state=ACTIVE)
+                    searchOneWorksiteBtn.config(state=ACTIVE)
+                    searchEntry1.delete(0,END)
+
         
         ##
         ## LAYOUT SETTINGS
@@ -468,7 +520,7 @@ class DeletePage(Frame):
         # Create frames for header and content
         headerFrame = Frame(self, bg="#9ed1e1")
         contentFrame = Frame(self, bg="#bcdfeb")
-        resultFrame = Frame(self, bg="#9ed1e1")
+        resultFrame = Frame(self, bg="#bcdfeb")
         # grid propagate so we can force frame sizes
         headerFrame.grid_propagate(0)
         contentFrame.grid_propagate(0)
@@ -505,14 +557,14 @@ class DeletePage(Frame):
         Button(headerFrame, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
-        # Search Entry Bar and Button
+        # Search Entry Bar and Buttons
         Label(contentFrame,text="Asset/Worksite ID:",font=('Arial',20),bg="#bcdfeb",justify="right",width=20,anchor=E
               ).grid(row=0,column=0, columnspan=3)
         searchEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=34)
         searchEntry1.grid(row=0,column=3,columnspan=4,sticky=W)
         searchOneAssetBtn = Button(contentFrame, text="Search Asset", font=('Arial',20),command=lambda: searchOneAsset(searchEntry1))
         searchOneAssetBtn.grid(row=1,column=1, columnspan=3)
-        searchOneWorksiteBtn = Button(contentFrame, text="Search Worksite", font=('Arial',20),command=lambda: deleteWorksite(searchEntry1))
+        searchOneWorksiteBtn = Button(contentFrame, text="Search Worksite", font=('Arial',20),command=lambda: searchOneWorksite(searchEntry1))
         searchOneWorksiteBtn.grid(row=1,column=3, columnspan=3)
         
 class ViewPage(Frame):
