@@ -31,8 +31,20 @@ assetData = "INSERT INTO asset(asset_type, asset_name, asset_cost, asset_purchas
 
 worksiteData = "INSERT INTO worksite(order_ID, worksite_type, worksite_address, worksite_city, worksite_zip) VALUES (?,?,?,?,?);"
 
+deleteAssetData = "DELETE from asset WHERE asset_ID = ?;"
+
+deleteWorksiteData = "DELETE from worksite WHERE worksite_ID = ?;"
+
+viewOneAssetData = "SELECT * FROM asset WHERE asset_ID = ?;"
+
+viewOneWorksiteData = "SELECT * FROM worksite WHERE worksite_ID = ?;"
+
+viewAllAssetData = "SELECT * FROM asset"
+
+viewAllWorksiteData = "SELECT * FROM worksite"
+
 ##============================================================
-## SQLITE DATABASE INITIATION
+## SQLITE DATABASE CONNECTION AND INITIATION FUNCTIONS
 ##
 
 def connect():
@@ -54,19 +66,32 @@ def addAsset(connection, asset_type, asset_name, asset_cost, asset_purchase_date
 
 def addWorksite(connection, order_ID, worksite_type, worksite_address, worksite_city, worksite_zip):
     with connection:
-        connection.execute(assetData, (order_ID, worksite_type, worksite_address, worksite_city, worksite_zip))
+        connection.execute(worksiteData, (order_ID, worksite_type, worksite_address, worksite_city, worksite_zip))
 
 def addAssignment():
     pass
 
+def deleteAsset(connection, asset_ID):
+    with connection:
+        connection.execute(deleteAssetData, (asset_ID,))
+
+def deleteWorksite(connection, worksite_ID):
+    with connection:
+        connection.execute(deleteWorksiteData, (worksite_ID,))
+
 def updateEntity():
     pass
 
-def deleteEntity():
+def viewOneAsset(connection, asset_ID):
+    with connection:
+        return connection.execute(viewOneAssetData, (asset_ID,)).fetchone()
+
+def viewOneWorksite(connection, worksite_ID):
+    with connection:
+        return connection.execute(viewOneWorksiteData, (worksite_ID,)).fetchone()
+
+def viewAllAssets():
     pass
 
-def viewAssets():
-    pass
-
-def viewWorksites():
+def viewAllWorksites():
     pass
