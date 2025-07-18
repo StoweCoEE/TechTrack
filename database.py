@@ -43,6 +43,8 @@ viewAllAssetData = "SELECT * FROM asset"
 
 viewAllWorksiteData = "SELECT * FROM worksite"
 
+assignmentData = "INSERT INTO assignment(asset_ID, worksite_ID) VALUES (?,?);"
+
 ##============================================================
 ## SQLITE DATABASE CONNECTION AND INITIATION FUNCTIONS
 ##
@@ -68,8 +70,9 @@ def addWorksite(connection, order_ID, worksite_type, worksite_address, worksite_
     with connection:
         connection.execute(worksiteData, (order_ID, worksite_type, worksite_address, worksite_city, worksite_zip))
 
-def addAssignment():
-    pass
+def addAssignment(connection, asset_ID, worksite_ID):
+    with connection:
+        connection.execute(assignmentData, (asset_ID, worksite_ID))
 
 def deleteAsset(connection, asset_ID):
     with connection:
@@ -79,7 +82,10 @@ def deleteWorksite(connection, worksite_ID):
     with connection:
         connection.execute(deleteWorksiteData, (worksite_ID,))
 
-def updateEntity():
+def updateAsset(connection, asset_ID, asset_type, asset_name, asset_cost, asset_purchase_date, asset_model_no):
+    pass
+
+def updateWorksite(connection, worksite_ID, order_ID, worksite_type, worksite_address, worksite_city, worksite_zip):
     pass
 
 def viewOneAsset(connection, asset_ID):
@@ -90,8 +96,10 @@ def viewOneWorksite(connection, worksite_ID):
     with connection:
         return connection.execute(viewOneWorksiteData, (worksite_ID,)).fetchone()
 
-def viewAllAssets():
-    pass
+def viewAllAssets(connection):
+    with connection:
+        return connection.execute(viewAllAssetData).fetchall()
 
-def viewAllWorksites():
-    pass
+def viewAllWorksites(connection):
+    with connection:
+        return connection.execute(viewAllWorksiteData).fetchall()

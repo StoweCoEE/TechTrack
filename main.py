@@ -414,7 +414,7 @@ class DeletePage(Frame):
                 assetTree.heading("Purchase Date", text="Purchase Date")
                 assetTree.heading("Cost", text="Cost")
                 assetTree.insert(parent="",index='end',iid=1,text="val",values=(
-                                 searchResult[0],searchResult[1],searchResult[2],
+                                 searchResult[0],searchResult[2],searchResult[1],
                                  searchResult[3],searchResult[4],searchResult[5]))
                 assetTree.pack()
                 searchOneAssetBtn.config(state=DISABLED)
@@ -563,6 +563,19 @@ class DeletePage(Frame):
 class ViewPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+
+        ##============================================================
+        ## WIDGET FUNCTION SETTINGS
+        ##
+
+        def DisplayAssets():
+            pass
+
+        def DisplayWorksites():
+            pass
+
+        def DisplayAssignments():
+            pass
         
         ##============================================================
         ## LAYOUT SETTINGS
@@ -573,18 +586,25 @@ class ViewPage(Frame):
         # Create frames for header and content
         headerFrame = Frame(self, bg="#9ed1e1")
         contentFrame = Frame(self, bg="#9ed1e1")
+        resultFrame = Frame(self, bg="#bcdfeb")
         # grid propagate so we can force frame sizes
         headerFrame.grid_propagate(0)
         contentFrame.grid_propagate(0)
+        resultFrame.grid_propagate(0)
         # configure frame sizes
         headerFrame.config(width=1220,height=100)
-        contentFrame.config(width=1220,height=600)
+        contentFrame.config(width=1220,height=100)
+        resultFrame.config(width=1220,height=500)
         # pack frames onto main frame
         headerFrame.pack(side="top")
+        resultFrame.pack(side="bottom")
         contentFrame.pack(side="bottom")
+        
         # Establish grid for content frame
-        contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
-        contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
+        contentFrame.columnconfigure((0,1,2,3,4,5,6,7),weight=1)
+        contentFrame.rowconfigure((0,1,2),weight=1)
+        resultFrame.columnconfigure((0,1,2,3,4,5,6,7),weight=1)
+        resultFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
         ##============================================================
         ## WIDGET SETTINGS
@@ -605,14 +625,16 @@ class ViewPage(Frame):
         
         # Button to View DB info by Assets or Worksites
         viewAssetBtn = Button(contentFrame, text="View Assets", font=('Arial',20))
-        viewAssetBtn.grid(row=0,column=0,columnspan=3)
+        viewAssetBtn.grid(row=1,column=0,columnspan=2)
         viewWorksiteBtn = Button(contentFrame, text="View Worksites", font=('Arial',20))
-        viewWorksiteBtn.grid(row=0,column=3,columnspan=3)
+        viewWorksiteBtn.grid(row=1,column=3,columnspan=2)
+        viewAssignmentsBtn = Button(contentFrame, text="View Assignments", font=('Arial',20))
+        viewAssignmentsBtn.grid(row=1,column=6,columnspan=2)
 
-        viewScroll = Scrollbar(contentFrame)
+        viewScroll = Scrollbar(resultFrame)
         viewScroll.grid(row=1,column=5,sticky=NS)
 
-        dataList = Listbox(contentFrame, width=100, height=25, font=('Arial',12),yscrollcommand=viewScroll.set)
+        dataList = Listbox(resultFrame, width=100, height=25, font=('Arial',12),yscrollcommand=viewScroll.set)
         dataList.grid(row=1,column=1,columnspan=4)
 
         viewScroll.configure(command=lambda: dataList.yview)
