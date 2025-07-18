@@ -397,6 +397,7 @@ class DeletePage(Frame):
                 foundLabel = Label(resultFrame,text="Asset Found:",font=('Arial',20),bg="#bcdfeb")
                 foundLabel.pack(pady=10)
                 searchResult=database.viewOneAsset(conn, assetID)
+                print(searchResult)
                 assetTree = ttk.Treeview(resultFrame,height=1)
                 assetTree['columns']=("ID","Name","Type","Model No.","Purchase Date","Cost")
                 assetTree.column("#0",width=1)
@@ -569,10 +570,130 @@ class ViewPage(Frame):
         ##
 
         def DisplayAssets():
-            pass
+
+            def resetView():
+                viewAssetBtn.config(state=ACTIVE)
+                viewWorksiteBtn.config(state=ACTIVE)
+                viewAssignmentsBtn.config(state=ACTIVE)
+                assetTree.destroy()
+                resetBtn.destroy()
+                viewScroll.destroy()
+
+            def softResetView():
+                viewAssetBtn.config(state=ACTIVE)
+                viewWorksiteBtn.config(state=ACTIVE)
+                viewAssignmentsBtn.config(state=ACTIVE)
+
+            viewAssetBtn.config(state=DISABLED)
+            viewWorksiteBtn.config(state=DISABLED)
+            viewAssignmentsBtn.config(state=DISABLED)
+            assetList = database.viewAllAssets(conn)
+            
+            if not len(assetList) == 0:
+                viewScroll = Scrollbar(resultFrame)
+                assetTree = ttk.Treeview(resultFrame,height=20,yscrollcommand=viewScroll.set)
+                assetTree['columns']=("ID","Name","Type","Model No.","Purchase Date","Cost")
+                assetTree.column("#0",width=1)
+                assetTree.column("ID",width=10)
+                assetTree.column("Name",width=150,anchor="center")
+                assetTree.column("Type",width=150,anchor="center")
+                assetTree.column("Model No.",width=120,anchor="center")
+                assetTree.column("Purchase Date",width=120,anchor="center")
+                assetTree.column("Cost",width=120,anchor="center")
+                assetTree.heading("#0", text="")
+                assetTree.heading("ID", text="ID")
+                assetTree.heading("Name", text="Name")
+                assetTree.heading("Type", text="Type")
+                assetTree.heading("Model No.", text="Model No.")
+                assetTree.heading("Purchase Date", text="Purchase Date")
+                assetTree.heading("Cost", text="Cost")
+                assetTree.tag_configure('even', background="gainsboro")
+                assetTree.tag_configure('odd', background="white")
+                i=0
+                for asset in range(0,len(assetList)):
+                    resultTup = assetList[asset]
+                    if i % 2 == 0:
+                        assetTree.insert(parent="",index='end',iid=i,text="val",values=(
+                                            resultTup[0],resultTup[2],resultTup[1],
+                                            resultTup[5],resultTup[4],resultTup[3]),tags=('even',))
+                    else:
+                        assetTree.insert(parent="",index='end',iid=i,text="val",values=(
+                                            resultTup[0],resultTup[2],resultTup[1],
+                                            resultTup[5],resultTup[4],resultTup[3]),tags=('odd',))
+                    i+=1
+                assetTree.pack(side="left")
+                viewScroll.pack(side="left",fill="y")
+                viewScroll.config(command=assetTree.yview)
+                resetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
+                                       command=lambda: resetView())
+                resetBtn.pack(side="right",padx=50)
+            else:
+                messagebox.showerror("Missing Data","No Assets Found")
+                softResetView()
 
         def DisplayWorksites():
-            pass
+
+            def resetView():
+                viewAssetBtn.config(state=ACTIVE)
+                viewWorksiteBtn.config(state=ACTIVE)
+                viewAssignmentsBtn.config(state=ACTIVE)
+                worksiteTree.destroy()
+                resetBtn.destroy()
+                viewScroll.destroy()
+
+            def softResetView():
+                viewAssetBtn.config(state=ACTIVE)
+                viewWorksiteBtn.config(state=ACTIVE)
+                viewAssignmentsBtn.config(state=ACTIVE)
+
+            viewAssetBtn.config(state=DISABLED)
+            viewWorksiteBtn.config(state=DISABLED)
+            viewAssignmentsBtn.config(state=DISABLED)
+
+            worksiteList = database.viewAllWorksites(conn)
+
+            if not len(worksiteList) == 0:
+                viewScroll = Scrollbar(resultFrame)
+                worksiteTree = ttk.Treeview(resultFrame,height=20,yscrollcommand=viewScroll.set)
+                worksiteTree['columns']=("ID","Order ID","Type","Address","City","Zip Code")
+                worksiteTree.column("#0",width=1)
+                worksiteTree.column("ID",width=10)
+                worksiteTree.column("Order ID",width=150,anchor="center")
+                worksiteTree.column("Type",width=150,anchor="center")
+                worksiteTree.column("Address",width=120,anchor="center")
+                worksiteTree.column("City",width=120,anchor="center")
+                worksiteTree.column("Zip Code",width=120,anchor="center")
+                worksiteTree.heading("#0", text="")
+                worksiteTree.heading("ID", text="ID")
+                worksiteTree.heading("Order ID", text="Order ID")
+                worksiteTree.heading("Type", text="Type")
+                worksiteTree.heading("Address", text="Address")
+                worksiteTree.heading("City", text="City")
+                worksiteTree.heading("Zip Code", text="Zip Code")
+                worksiteTree.tag_configure('even', background="gainsboro")
+                worksiteTree.tag_configure('odd', background="white")
+                i=0
+                for worksite in range(0,len(worksiteList)):
+                    resultTup = worksiteList[worksite]
+                    if i % 2 == 0:
+                        worksiteTree.insert(parent="",index='end',iid=i,text="val",values=(
+                                            resultTup[0],resultTup[1],resultTup[2],
+                                            resultTup[3],resultTup[4],resultTup[5]),tags=('even',))
+                    else:
+                        worksiteTree.insert(parent="",index='end',iid=i,text="val",values=(
+                                            resultTup[0],resultTup[1],resultTup[2],
+                                            resultTup[3],resultTup[4],resultTup[5]),tags=('odd',))
+                    i+=1
+                worksiteTree.pack(side="left")
+                viewScroll.pack(side="left",fill="y")
+                viewScroll.config(command=worksiteTree.yview)
+                resetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
+                                       command=lambda: resetView())
+                resetBtn.pack(side="right",padx=50)
+            else:
+                messagebox.showerror("Missing Data","No Worksites Found")
+                softResetView()
+            
 
         def DisplayAssignments():
             pass
@@ -585,7 +706,7 @@ class ViewPage(Frame):
         self.config(background="#bcdfeb")
         # Create frames for header and content
         headerFrame = Frame(self, bg="#9ed1e1")
-        contentFrame = Frame(self, bg="#9ed1e1")
+        contentFrame = Frame(self, bg="#bcdfeb")
         resultFrame = Frame(self, bg="#bcdfeb")
         # grid propagate so we can force frame sizes
         headerFrame.grid_propagate(0)
@@ -624,20 +745,13 @@ class ViewPage(Frame):
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
         
         # Button to View DB info by Assets or Worksites
-        viewAssetBtn = Button(contentFrame, text="View Assets", font=('Arial',20))
+        viewAssetBtn = Button(contentFrame, text="View Assets", font=('Arial',20),command=lambda: DisplayAssets())
         viewAssetBtn.grid(row=1,column=0,columnspan=2)
-        viewWorksiteBtn = Button(contentFrame, text="View Worksites", font=('Arial',20))
+        viewWorksiteBtn = Button(contentFrame, text="View Worksites", font=('Arial',20),command=lambda: DisplayWorksites())
         viewWorksiteBtn.grid(row=1,column=3,columnspan=2)
         viewAssignmentsBtn = Button(contentFrame, text="View Assignments", font=('Arial',20))
         viewAssignmentsBtn.grid(row=1,column=6,columnspan=2)
 
-        viewScroll = Scrollbar(resultFrame)
-        viewScroll.grid(row=1,column=5,sticky=NS)
-
-        dataList = Listbox(resultFrame, width=100, height=25, font=('Arial',12),yscrollcommand=viewScroll.set)
-        dataList.grid(row=1,column=1,columnspan=4)
-
-        viewScroll.configure(command=lambda: dataList.yview)
 
 class AssignmentPage(Frame):
     def __init__(self, parent):
