@@ -45,6 +45,8 @@ viewAllWorksiteData = "SELECT * FROM worksite"
 
 assignmentData = "INSERT INTO assignment(asset_ID, worksite_ID) VALUES (?,?);"
 
+viewAssignments = "SELECT  FROM     assignment s JOIN asset a ;"
+
 ##============================================================
 ## SQLITE DATABASE CONNECTION AND INITIATION FUNCTIONS
 ##

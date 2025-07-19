@@ -420,10 +420,10 @@ class DeletePage(Frame):
                 assetTree.pack()
                 searchOneAssetBtn.config(state=DISABLED)
                 searchOneWorksiteBtn.config(state=DISABLED)
-                confirmAssetBtn = Button(resultFrame,text="Confirm Delete", font=('Arial',20),
+                confirmAssetBtn = Button(resultFrame, text="Confirm Delete", font=('Arial',20),
                                          command=lambda: deleteAsset(assetID,assetTree,confirmAssetBtn,resetAssetBtn,foundLabel))
                 confirmAssetBtn.pack(pady=10)
-                resetAssetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
+                resetAssetBtn = Button(resultFrame, text="Reset", font=('Arial',20),
                                        command=lambda: resetAsset(assetTree,confirmAssetBtn,resetAssetBtn,foundLabel))
                 resetAssetBtn.pack(pady=10)
 
@@ -752,10 +752,109 @@ class ViewPage(Frame):
         viewAssignmentsBtn = Button(contentFrame, text="View Assignments", font=('Arial',20))
         viewAssignmentsBtn.grid(row=1,column=6,columnspan=2)
 
-
 class AssignmentPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
+
+        def comboSearch():
+
+            def confirmAssign():
+                database.addAssignment(conn, entry1, entry2)
+                messagebox.showinfo("Assignment Success","Entity Assignment Successful")
+                searchComboBtn.config(state=ACTIVE)
+                worksiteTree.destroy()
+                assetTree.destroy()
+                confirmBtn.destroy()
+                resetBtn.destroy()
+                assetLabel.destroy()
+                worksiteLabel.destroy()
+                searchEntry1.delete(0,END)
+                searchEntry2.delete(0,END)
+
+
+            def resetView():
+                searchComboBtn.config(state=ACTIVE)
+                worksiteTree.destroy()
+                assetTree.destroy()
+                confirmBtn.destroy()
+                resetBtn.destroy()
+                assetLabel.destroy()
+                worksiteLabel.destroy()
+                searchEntry1.delete(0,END)
+                searchEntry2.delete(0,END)
+
+            entry1 = searchEntry1.get()
+            entry2 = searchEntry2.get()
+            assetID = database.viewOneAsset(conn, entry1)
+            worksiteID = database.viewOneWorksite(conn, entry2)
+
+            if (entry1 == "") or (entry2 == ""):
+                messagebox.showerror("Missing Entry","Please Enter an Asset ID and Worksite ID")
+                searchEntry1.delete(0,END)
+                searchEntry2.delete(0,END)
+                searchComboBtn.config(state=ACTIVE)
+            elif assetID == None:
+                messagebox.showerror("Asset Not Found","No asset exists with that Asset ID")
+                searchEntry1.delete(0,END)
+                searchEntry2.delete(0,END)
+                searchComboBtn.config(state=ACTIVE)
+            elif worksiteID == None:
+                messagebox.showerror("Worksite Not Found","No worksite exists with that Worksite ID")
+                searchEntry1.delete(0,END)
+                searchEntry2.delete(0,END)
+                searchComboBtn.config(state=ACTIVE)
+            else:
+                searchComboBtn.config(state=DISABLED)
+                
+                assetLabel = Label(resultFrame,text="Asset:",font=('Arial',20),bg="#bcdfeb")
+                assetLabel.pack(pady=10)
+                assetTree = ttk.Treeview(resultFrame,height=1)
+                assetTree['columns']=("ID","Name","Type","Model No.","Purchase Date","Cost")
+                assetTree.column("#0",width=1)
+                assetTree.column("ID",width=10)
+                assetTree.column("Name",width=150,anchor="center")
+                assetTree.column("Type",width=150,anchor="center")
+                assetTree.column("Model No.",width=120,anchor="center")
+                assetTree.column("Purchase Date",width=120,anchor="center")
+                assetTree.column("Cost",width=120,anchor="center")
+                assetTree.heading("#0", text="")
+                assetTree.heading("ID", text="ID")
+                assetTree.heading("Name", text="Name")
+                assetTree.heading("Type", text="Type")
+                assetTree.heading("Model No.", text="Model No.")
+                assetTree.heading("Purchase Date", text="Purchase Date")
+                assetTree.heading("Cost", text="Cost")
+                assetTree.insert(parent="",index='end',iid=1,text="val",values=(
+                                 assetID[0],assetID[2],assetID[1],
+                                 assetID[3],assetID[4],assetID[5]))
+                assetTree.pack()
+                worksiteLabel = Label(resultFrame,text="Worksite:",font=('Arial',20),bg="#bcdfeb")
+                worksiteLabel.pack(pady=10)
+                worksiteTree = ttk.Treeview(resultFrame,height=1)
+                worksiteTree['columns']=("ID","Order ID","Type","Address","City","Zip Code")
+                worksiteTree.column("#0",width=1)
+                worksiteTree.column("ID",width=10)
+                worksiteTree.column("Order ID",width=150,anchor="center")
+                worksiteTree.column("Type",width=150,anchor="center")
+                worksiteTree.column("Address",width=120,anchor="center")
+                worksiteTree.column("City",width=120,anchor="center")
+                worksiteTree.column("Zip Code",width=120,anchor="center")
+                worksiteTree.heading("#0", text="")
+                worksiteTree.heading("ID", text="ID")
+                worksiteTree.heading("Order ID", text="Order ID")
+                worksiteTree.heading("Type", text="Type")
+                worksiteTree.heading("Address", text="Address")
+                worksiteTree.heading("City", text="City")
+                worksiteTree.heading("Zip Code", text="Zip Code")
+                worksiteTree.insert(parent="",index='end',iid=1,text="val",values=(
+                                 worksiteID[0],worksiteID[1],worksiteID[2],
+                                 worksiteID[3],worksiteID[4],worksiteID[5]))
+                worksiteTree.pack()
+                confirmBtn = Button(resultFrame,text="Confirm Assignment", font=('Arial',20),command=lambda: confirmAssign())
+                confirmBtn.pack(pady=20)
+                resetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
+                                       command=lambda: resetView())
+                resetBtn.pack()
         
         ##============================================================
         ## LAYOUT SETTINGS
@@ -765,19 +864,25 @@ class AssignmentPage(Frame):
         self.config(background="#bcdfeb")
         # Create frames for header and content
         headerFrame = Frame(self, bg="#9ed1e1")
-        contentFrame = Frame(self, bg="#9ed1e1")
+        contentFrame = Frame(self, bg="#bcdfeb")
+        resultFrame = Frame(self, bg="#bcdfeb")
         # grid propagate so we can force frame sizes
         headerFrame.grid_propagate(0)
         contentFrame.grid_propagate(0)
+        resultFrame.grid_propagate(0)
         # configure frame sizes
         headerFrame.config(width=1220,height=100)
-        contentFrame.config(width=1220,height=600)
+        contentFrame.config(width=1220,height=150)
+        resultFrame.config(width=1220,height=450)
         # pack frames onto main frame
         headerFrame.pack(side="top")
+        resultFrame.pack(side="bottom")
         contentFrame.pack(side="bottom")
         # Establish grid for content frame
         contentFrame.columnconfigure((0,1,2,3,4,5,6),weight=1)
-        contentFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
+        contentFrame.rowconfigure((0,1,2,3),weight=1)
+        resultFrame.columnconfigure((0,1,2,3,4,5,6,7),weight=1)
+        resultFrame.rowconfigure((0,1,2,3,4,5,6,7),weight=1)
 
         ##============================================================
         ## WIDGET SETTINGS
@@ -795,6 +900,18 @@ class AssignmentPage(Frame):
         Label(headerFrame, text="Entity Assignments",font=('Arial',36,'bold'),bg="#9ed1e1",width=33).pack(side="left")
         Button(headerFrame, text="Return to Home Page",
                command=lambda: parent.switch_frame(HomePage)).pack(side="left",fill="y")
+        
+        # Search Bar and Button
+        Label(contentFrame,text="Asset ID:",font=('Arial',20),bg="#bcdfeb",justify="right",width=20,anchor=E
+              ).grid(row=0,column=0, columnspan=3)
+        searchEntry1 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=34)
+        searchEntry1.grid(row=0,column=3,columnspan=4,sticky=W)
+        Label(contentFrame,text="Worksite ID:",font=('Arial',20),bg="#bcdfeb",justify="right",width=20,anchor=E
+              ).grid(row=1,column=0, columnspan=3)
+        searchEntry2 = Entry(contentFrame,font=('Arial',20),relief=RIDGE,width=34)
+        searchEntry2.grid(row=1,column=3,columnspan=4,sticky=W)
+        searchComboBtn = Button(contentFrame, text="Search", font=('Arial',20),command=lambda: comboSearch())
+        searchComboBtn.grid(row=2,column=0,columnspan=7)
 
 ##============================================================
 ## TKINTER WINDOW MAINLOOP
