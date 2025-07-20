@@ -31,6 +31,8 @@ assetData = "INSERT INTO asset(asset_type, asset_name, asset_cost, asset_purchas
 
 worksiteData = "INSERT INTO worksite(order_ID, worksite_type, worksite_address, worksite_city, worksite_zip) VALUES (?,?,?,?,?);"
 
+assignmentData = "INSERT INTO assignment(asset_ID, worksite_ID) VALUES (?,?);"
+
 deleteAssetData = "DELETE from asset WHERE asset_ID = ?;"
 
 deleteWorksiteData = "DELETE from worksite WHERE worksite_ID = ?;"
@@ -43,9 +45,11 @@ viewAllAssetData = "SELECT * FROM asset"
 
 viewAllWorksiteData = "SELECT * FROM worksite"
 
-assignmentData = "INSERT INTO assignment(asset_ID, worksite_ID) VALUES (?,?);"
+viewAllAssignmentData = "SELECT * FROM assignment"
 
-viewAssignments = "SELECT  FROM     assignment s JOIN asset a ;"
+updateAssetData = "INSERT INTO asset(asset_ID, asset_type, asset_name, asset_cost, asset_purchase_date, asset_model_no) VALUES (?,?,?,?,?,?);"
+
+updateWorksiteData = "INSERT INTO worksite(worksite_ID, order_ID, worksite_type, worksite_address, worksite_city, worksite_zip) VALUES (?,?,?,?,?,?);"
 
 ##============================================================
 ## SQLITE DATABASE CONNECTION AND INITIATION FUNCTIONS
@@ -85,10 +89,12 @@ def deleteWorksite(connection, worksite_ID):
         connection.execute(deleteWorksiteData, (worksite_ID,))
 
 def updateAsset(connection, asset_ID, asset_type, asset_name, asset_cost, asset_purchase_date, asset_model_no):
-    pass
+    with connection:
+        connection.execute(updateAssetData, (asset_ID, asset_type, asset_name, asset_cost, asset_purchase_date, asset_model_no))
 
 def updateWorksite(connection, worksite_ID, order_ID, worksite_type, worksite_address, worksite_city, worksite_zip):
-    pass
+    with connection:
+        connection.execute(updateWorksiteData, (worksite_ID, order_ID, worksite_type, worksite_address, worksite_city, worksite_zip))
 
 def viewOneAsset(connection, asset_ID):
     with connection:
@@ -105,3 +111,7 @@ def viewAllAssets(connection):
 def viewAllWorksites(connection):
     with connection:
         return connection.execute(viewAllWorksiteData).fetchall()
+    
+def viewAllAssignments(connection):
+    with connection:
+        return connection.execute(viewAllAssignmentData).fetchall()
