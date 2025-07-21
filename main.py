@@ -14,6 +14,7 @@ class TechTrack(Tk):
     def __init__(self):
         super().__init__()
         
+        #Create Window and set configuration.
         self.geometry('1280x720')
         self.title("TechTrack")
         self.config(background="#bcdfeb")
@@ -21,9 +22,11 @@ class TechTrack(Tk):
         icon = PhotoImage(file='images\\techtrack_logo.png')
         self.iconphoto(True, icon)
 
+        #Set _frame value to None and initiate Home page frame
         self._frame = None
         self.switch_frame(HomePage)
 
+    # Switch Frame function used to switch between frames. Old frame is destroyed.
     def switch_frame(self, frame_class):
         new_frame = frame_class(self)
         if self._frame is not None:
@@ -92,6 +95,7 @@ class AddAssetPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
+        # Variables for text insertion and compariosn tests
         placeholder1 = "(Enter Asset Name)"
         placeholder2 = "(Enter Asset Type)"
         placeholder3 = "(Enter Asset Model Number)"
@@ -102,6 +106,7 @@ class AddAssetPage(Frame):
         ## WIDGET FUNCTION SETTINGS
         ##
 
+        # Function for submitBtn. Takes user input and adds asset to database
         def addAssetClick(entry1, entry2, entry3, entry4, entry5):
             assetName = entry1.get()
             assetType = entry2.get()
@@ -109,6 +114,7 @@ class AddAssetPage(Frame):
             assetPurchaseDate = entry4.get()
             assetCost = entry5.get()
 
+            # Checks for input error and adds asset to database if no errors
             if (len(assetName) == 0 or len(assetType) == 0 or len(assetModelNo) == 0 or len(assetPurchaseDate) == 0 or len(assetCost) == 0):
                 messagebox.showerror("Error","Entry Data Was Missing")
                 userEntry1.delete(0,END)
@@ -211,6 +217,7 @@ class AddWorksitePage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
+        # Variables for text insertion and compariosn tests
         placeholder1 = "(Enter Order ID)"
         placeholder2 = "(Enter Worksite Type)"
         placeholder3 = "(Enter Worksite Address)"
@@ -221,6 +228,7 @@ class AddWorksitePage(Frame):
         ## WIDGET FUNCTION SETTINGS
         ##
 
+        # Function for submitBtn. Takes user input and adds asset to database
         def addWorksiteClick(entry1, entry2, entry3, entry4, entry5):
             orderID = entry1.get()
             worksiteType = entry2.get()
@@ -228,6 +236,7 @@ class AddWorksitePage(Frame):
             worksiteCity = entry4.get()
             worksiteZip = entry5.get()
 
+            # Checks for input error and adds asset to database if no errors
             if (len(orderID) == 0 or len(worksiteType) == 0 or len(worksiteAddress) == 0 or len(worksiteCity) == 0 or len(worksiteZip) == 0):
                 messagebox.showerror("Error","Entry Data Was Missing")
                 userEntry1.delete(0,END)
@@ -331,17 +340,26 @@ class UpdatePage(Frame):
     def __init__(self, parent):
         Frame.__init__(self, parent)
 
+        ##============================================================
+        ## WIDGET FUNCTION SETTINGS
+        ##
+
+        # Function for SearchOneAssetBtn.
         def searchOneAsset():
+            #Fetches User Entry
             assetID = searchEntry1.get()
 
+            # Checks for missing user entry. Else displays found asset data
             if assetID == "":
                 messagebox.showerror("Missing Entry","Please Enter an Entity ID")
                 searchEntry1.delete(0,END)
             else:
                 foundLabel = Label(resultFrame,text="Asset Found:",font=('Arial',20),bg="#bcdfeb")
                 foundLabel.grid(row=0,column=0,columnspan=7)
+                # Searches database for asset matching the ID entered by user
                 searchResult=database.viewOneAsset(conn, assetID)
 
+                # Labels and Entries containing found asset data
                 label0 = Label(resultFrame,text="Asset ID:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20)
                 label0.grid(row=1,column=0,columnspan=3)
                 userEntry0 = Entry(resultFrame,font=('Arial',20),relief=RIDGE,width=50)
@@ -379,26 +397,31 @@ class UpdatePage(Frame):
                 userEntry5.insert(0,searchResult[3])
                 userEntry5.grid(row=6,column=3,columnspan=3,sticky=W)
                 
+                # Disable previous buttons to prevent extra widgets from breaking layout structure
                 searchOneAssetBtn.config(state=DISABLED)
                 searchOneWorksiteBtn.config(state=DISABLED)
 
+                # Buttons to either confirm or reset changes to the found asset
                 confirmAssetBtn = Button(resultFrame, text="Confirm Update", font=('Arial',20),
                                          command=lambda: UpdateAsset())
                 confirmAssetBtn.grid(row=7,column=0,columnspan=4)
-
                 resetAssetBtn = Button(resultFrame, text="Reset", font=('Arial',20),command=lambda: resetAsset())
                 resetAssetBtn.grid(row=7,column=4,columnspan=4)
 
+            # Function for confirmAssetBtn. Applies changes to asset by deleting and recreating asset with user-given ID
             def UpdateAsset():
+                # Get user's entry data (Changes to asset)
                 assetID=userEntry0.get()
                 assetType=userEntry2.get()
                 assetName=userEntry1.get()
                 assetCost=userEntry5.get()
                 assetPurchase=userEntry4.get()
                 assetModel=userEntry3.get()
+                # Delete and recreate asset using user-given asset ID
                 database.deleteAsset(conn, assetID)
                 database.updateAsset(conn, assetID,assetType,assetName,assetCost,assetPurchase,assetModel)
                 messagebox.showinfo("Update Success","Asset Updated Successfully")
+                # Remove all widgets to reset to default page view
                 foundLabel.destroy()
                 label0.destroy()
                 label1.destroy()
@@ -414,10 +437,12 @@ class UpdatePage(Frame):
                 userEntry5.destroy()
                 resetAssetBtn.destroy()
                 confirmAssetBtn.destroy()
+                # Reset initial buttons and delete any user entry
                 searchOneAssetBtn.config(state=ACTIVE)
                 searchOneWorksiteBtn.config(state=ACTIVE)
                 searchEntry1.delete(0,END)
 
+            # Function for resetAssetBtn. Reverts page to default view
             def resetAsset():
                 foundLabel.destroy()
                 label0.destroy()
@@ -439,16 +464,20 @@ class UpdatePage(Frame):
                 searchEntry1.delete(0,END)
 
         def searchOneWorksite():
+            #Fetches User Entry
             worksiteID = searchEntry1.get()
 
+            # Checks for missing user entry. Else displays found worksite data
             if worksiteID == "":
                 messagebox.showerror("Missing Entry","Please Enter an Entity ID")
                 searchEntry1.delete(0,END)
             else:
                 foundLabel = Label(resultFrame,text="Worksite Found:",font=('Arial',20),bg="#bcdfeb")
                 foundLabel.grid(row=0,column=0,columnspan=7)
+                # Searches database for worksite matching the ID entered by user
                 searchResult=database.viewOneWorksite(conn, worksiteID)
 
+                # Labels and Entries containing found worksite data
                 label0 = Label(resultFrame,text="Worksite ID:",font=('Arial',26),bg="#bcdfeb",justify="right",width=20)
                 label0.grid(row=1,column=0,columnspan=3)
                 userEntry0 = Entry(resultFrame,font=('Arial',20),relief=RIDGE,width=50)
@@ -486,26 +515,31 @@ class UpdatePage(Frame):
                 userEntry5.insert(0,searchResult[5])
                 userEntry5.grid(row=6,column=3,columnspan=3,sticky=W)
                 
+                # Disable previous buttons to prevent extra widgets from breaking layout structure
                 searchOneAssetBtn.config(state=DISABLED)
                 searchOneWorksiteBtn.config(state=DISABLED)
 
+                # Buttons to either confirm or reset changes to the found worksite
                 confirmAssetBtn = Button(resultFrame, text="Confirm Update", font=('Arial',20),
                                          command=lambda: UpdateWorksite())
                 confirmAssetBtn.grid(row=7,column=0,columnspan=4)
-
                 resetAssetBtn = Button(resultFrame, text="Reset", font=('Arial',20),command=lambda: resetAsset())
                 resetAssetBtn.grid(row=7,column=4,columnspan=4)
 
+            # Function for confirmWorksiteBtn. Applies changes to worksite by deleting and recreating worksite with user-given ID
             def UpdateWorksite():
+                # Get user's entry data (Changes to worksite)
                 worksiteID=userEntry0.get()
                 orderID=userEntry1.get()
                 workType=userEntry2.get()
                 address=userEntry3.get()
                 city=userEntry4.get()
                 zip=userEntry5.get()
+                # Delete and recreate worksite using user-given worksite ID
                 database.deleteWorksite(conn, worksiteID)
                 database.updateWorksite(conn, worksiteID,orderID,workType,address,city,zip)
                 messagebox.showinfo("Update Success","Worksite Updated Successfully")
+                # Remove all widgets to reset to default page view
                 foundLabel.destroy()
                 label0.destroy()
                 label1.destroy()
@@ -521,10 +555,12 @@ class UpdatePage(Frame):
                 userEntry5.destroy()
                 resetAssetBtn.destroy()
                 confirmAssetBtn.destroy()
+                # Reset initial buttons and delete any user entry
                 searchOneAssetBtn.config(state=ACTIVE)
                 searchOneWorksiteBtn.config(state=ACTIVE)
                 searchEntry1.delete(0,END)
 
+            # Function for resetAssetBtn. Reverts page to default view
             def resetAsset():
                 foundLabel.destroy()
                 label0.destroy()
@@ -608,17 +644,21 @@ class DeletePage(Frame):
         ## WIDGET FUNCTION SETTINGS
         ##
 
+        # Function for searchOneAssetBtn. 
         def searchOneAsset(userEntry):
+            #Fetches User Entry
             assetID = userEntry.get()
 
+            # Checks for entry error by user. Else displays found asset data.
             if assetID == "":
                 messagebox.showerror("Missing Entry","Please Enter an Entity ID")
                 searchEntry1.delete(0,END)
             else:
                 foundLabel = Label(resultFrame,text="Asset Found:",font=('Arial',20),bg="#bcdfeb")
                 foundLabel.pack(pady=10)
+                # Searches database for asset matching the ID entered by user
                 searchResult=database.viewOneAsset(conn, assetID)
-                print(searchResult)
+                # Creates treeview for viewing asset data
                 assetTree = ttk.Treeview(resultFrame,height=1)
                 assetTree['columns']=("ID","Name","Type","Model No.","Purchase Date","Cost")
                 assetTree.column("#0",width=1)
@@ -635,12 +675,15 @@ class DeletePage(Frame):
                 assetTree.heading("Model No.", text="Model No.")
                 assetTree.heading("Purchase Date", text="Purchase Date")
                 assetTree.heading("Cost", text="Cost")
+                # Insert found asset data into treeview
                 assetTree.insert(parent="",index='end',iid=1,text="val",values=(
                                  searchResult[0],searchResult[2],searchResult[1],
                                  searchResult[3],searchResult[4],searchResult[5]))
                 assetTree.pack()
+                # Disable previous buttons to prevent extra widgets from breaking layout structure
                 searchOneAssetBtn.config(state=DISABLED)
                 searchOneWorksiteBtn.config(state=DISABLED)
+                # Buttons to either confirm or reset deletion of the found asset
                 confirmAssetBtn = Button(resultFrame, text="Confirm Delete", font=('Arial',20),
                                          command=lambda: deleteAsset(assetID,assetTree,confirmAssetBtn,resetAssetBtn,foundLabel))
                 confirmAssetBtn.pack(pady=10)
@@ -648,9 +691,12 @@ class DeletePage(Frame):
                                        command=lambda: resetAsset(assetTree,confirmAssetBtn,resetAssetBtn,foundLabel))
                 resetAssetBtn.pack(pady=10)
 
+            # Function for confirmAssetBtn. Deletes asset at user-given asset ID
             def deleteAsset(userEntry, tree, confrmButton,resetButton,label):
+                    # Deletes worksite from database using user-given asset ID
                     database.deleteAsset(conn, userEntry)
                     messagebox.showinfo("Delete Success","Asset Deleted Successfully")
+                    # Resets page back to default view
                     tree.destroy()
                     confrmButton.destroy()
                     resetButton.destroy()
@@ -659,6 +705,7 @@ class DeletePage(Frame):
                     searchOneWorksiteBtn.config(state=ACTIVE)
                     searchEntry1.delete(0,END)
 
+            # Function for resetAssetBtn. Resets page back to default view
             def resetAsset(tree, confrmButton,resetButton,label):
                     tree.destroy()
                     confrmButton.destroy()
@@ -668,16 +715,21 @@ class DeletePage(Frame):
                     searchOneWorksiteBtn.config(state=ACTIVE)
                     searchEntry1.delete(0,END)
 
+        # Function for searchOneWorksiteBtn.
         def searchOneWorksite(userEntry):
+            #Fetches User Entry
             worksiteID = userEntry.get()
             
+            # Checks for entry error by user. Else displays found worksite data.
             if worksiteID == "":
                 messagebox.showerror("Missing Entry","Please Enter an Entity ID")
                 searchEntry1.delete(0,END)
             else:
                 foundLabel = Label(resultFrame,text="Worksite Found:",font=('Arial',20),bg="#bcdfeb")
                 foundLabel.pack(pady=10)
+                # Searches database for worksite matching the ID entered by user
                 searchResult=database.viewOneWorksite(conn, worksiteID)
+                # Creates treeview for viewing worksite data
                 worksiteTree = ttk.Treeview(resultFrame,height=1)
                 worksiteTree['columns']=("ID","Order ID","Type","Address","City","Zip Code")
                 worksiteTree.column("#0",width=1)
@@ -694,12 +746,15 @@ class DeletePage(Frame):
                 worksiteTree.heading("Address", text="Address")
                 worksiteTree.heading("City", text="City")
                 worksiteTree.heading("Zip Code", text="Zip Code")
+                # Insert found worksite data into treeview
                 worksiteTree.insert(parent="",index='end',iid=1,text="val",values=(
                                  searchResult[0],searchResult[1],searchResult[2],
                                  searchResult[3],searchResult[4],searchResult[5]))
                 worksiteTree.pack()
+                # Disable previous buttons to prevent extra widgets from breaking layout structure
                 searchOneAssetBtn.config(state=DISABLED)
                 searchOneWorksiteBtn.config(state=DISABLED)
+                # Buttons to either confirm or reset deletion of the found worksite
                 confirmWorksiteBtn = Button(resultFrame,text="Confirm Delete", font=('Arial',20),
                                          command=lambda: deleteWorksite(worksiteID,worksiteTree,confirmWorksiteBtn,resetWorksiteBtn,foundLabel))
                 confirmWorksiteBtn.pack(pady=10)
@@ -707,9 +762,12 @@ class DeletePage(Frame):
                                        command=lambda: resetWorksite(worksiteTree,confirmWorksiteBtn,resetWorksiteBtn,foundLabel))
                 resetWorksiteBtn.pack(pady=10)
 
+                # Function for confirmWorksiteBtn. Deletes worksite at user-given worksite ID
                 def deleteWorksite(userEntry, tree, confrmButton,resetButton,label):
+                    # Deletes worksite from database using user-given worksite ID
                     database.deleteWorksite(conn, userEntry)
                     messagebox.showinfo("Delete Success","Worksite Deleted Successfully")
+                    # Resets page back to default view
                     tree.destroy()
                     confrmButton.destroy()
                     resetButton.destroy()
@@ -718,6 +776,7 @@ class DeletePage(Frame):
                     searchOneWorksiteBtn.config(state=ACTIVE)
                     searchEntry1.delete(0,END)
 
+                # Function for resetWorksiteBtn. Resets page back to default view
                 def resetWorksite(tree, confrmButton,resetButton,label):
                     tree.destroy()
                     confrmButton.destroy()
@@ -790,8 +849,10 @@ class ViewPage(Frame):
         ## WIDGET FUNCTION SETTINGS
         ##
 
+        # Function for viewAssetBtn. 
         def DisplayAssets():
-
+            
+            # Function for resetBtn. Sets page back to default view after successful search
             def resetView():
                 viewAssetBtn.config(state=ACTIVE)
                 viewWorksiteBtn.config(state=ACTIVE)
@@ -800,17 +861,23 @@ class ViewPage(Frame):
                 resetBtn.destroy()
                 viewScroll.destroy()
 
+            # Function to set page back to default view used after and error
             def softResetView():
                 viewAssetBtn.config(state=ACTIVE)
                 viewWorksiteBtn.config(state=ACTIVE)
                 viewAssignmentsBtn.config(state=ACTIVE)
 
+            # Disable previous buttons to prevent extra widgets from breaking layout structure
             viewAssetBtn.config(state=DISABLED)
             viewWorksiteBtn.config(state=DISABLED)
             viewAssignmentsBtn.config(state=DISABLED)
+
+            # Retrieves a list of tuples of all asset entitites in database 'asset' table
             assetList = database.viewAllAssets(conn)
             
+            # Checks if database 'asset' table is empty. If so, prints error, if not, displays entities
             if not len(assetList) == 0:
+                # Creates treeview to display entity data
                 viewScroll = Scrollbar(resultFrame)
                 assetTree = ttk.Treeview(resultFrame,height=20,yscrollcommand=viewScroll.set)
                 assetTree['columns']=("ID","Name","Type","Model No.","Purchase Date","Cost")
@@ -828,8 +895,11 @@ class ViewPage(Frame):
                 assetTree.heading("Model No.", text="Model No.")
                 assetTree.heading("Purchase Date", text="Purchase Date")
                 assetTree.heading("Cost", text="Cost")
+                # Tags to display entity data in alternating colors
                 assetTree.tag_configure('even', background="gainsboro")
                 assetTree.tag_configure('odd', background="white")
+                
+                # loops through list of tuples and inserts entity data to treeview. 
                 i=0
                 for asset in range(0,len(assetList)):
                     resultTup = assetList[asset]
@@ -842,9 +912,11 @@ class ViewPage(Frame):
                                             resultTup[0],resultTup[2],resultTup[1],
                                             resultTup[5],resultTup[4],resultTup[3]),tags=('odd',))
                     i+=1
+                
                 assetTree.pack(side="left")
                 viewScroll.pack(side="left",fill="y")
                 viewScroll.config(command=assetTree.yview)
+                # Button for reseting page view after entity data is displayed
                 resetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
                                        command=lambda: resetView())
                 resetBtn.pack(side="right",padx=50)
@@ -852,8 +924,10 @@ class ViewPage(Frame):
                 messagebox.showerror("Missing Data","No Assets Found")
                 softResetView()
 
+        # Function for viewWorksiteBtn.
         def DisplayWorksites():
 
+            # Function for resetBtn. Sets page back to default view after successful search
             def resetView():
                 viewAssetBtn.config(state=ACTIVE)
                 viewWorksiteBtn.config(state=ACTIVE)
@@ -862,18 +936,23 @@ class ViewPage(Frame):
                 resetBtn.destroy()
                 viewScroll.destroy()
 
+            # Function to set page back to default view used after and error
             def softResetView():
                 viewAssetBtn.config(state=ACTIVE)
                 viewWorksiteBtn.config(state=ACTIVE)
                 viewAssignmentsBtn.config(state=ACTIVE)
 
+            # Disable previous buttons to prevent extra widgets from breaking layout structure
             viewAssetBtn.config(state=DISABLED)
             viewWorksiteBtn.config(state=DISABLED)
             viewAssignmentsBtn.config(state=DISABLED)
 
+            # Retrieves a list of tuples of all worksite entitites in database 'worksite' table
             worksiteList = database.viewAllWorksites(conn)
 
+            # Checks if database 'worksite' table is empty. If so, prints error, if not, displays entities
             if not len(worksiteList) == 0:
+                # Creates treeview to display entity data
                 viewScroll = Scrollbar(resultFrame)
                 worksiteTree = ttk.Treeview(resultFrame,height=20,yscrollcommand=viewScroll.set)
                 worksiteTree['columns']=("ID","Order ID","Type","Address","City","Zip Code")
@@ -891,8 +970,11 @@ class ViewPage(Frame):
                 worksiteTree.heading("Address", text="Address")
                 worksiteTree.heading("City", text="City")
                 worksiteTree.heading("Zip Code", text="Zip Code")
+                # Tags to display entity data in alternating colors
                 worksiteTree.tag_configure('even', background="gainsboro")
                 worksiteTree.tag_configure('odd', background="white")
+
+                # loops through list of tuples and inserts entity data to treeview.
                 i=0
                 for worksite in range(0,len(worksiteList)):
                     resultTup = worksiteList[worksite]
@@ -905,17 +987,22 @@ class ViewPage(Frame):
                                             resultTup[0],resultTup[1],resultTup[2],
                                             resultTup[3],resultTup[4],resultTup[5]),tags=('odd',))
                     i+=1
+                
                 worksiteTree.pack(side="left")
                 viewScroll.pack(side="left",fill="y")
                 viewScroll.config(command=worksiteTree.yview)
+                # Button for reseting page view after entity data is displayed
                 resetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
                                        command=lambda: resetView())
                 resetBtn.pack(side="right",padx=50)
             else:
                 messagebox.showerror("Missing Data","No Worksites Found")
                 softResetView()
-            
+        
+        # Function for viewAssignmentBtn.
         def DisplayAssignments():
+
+            # Function for resetBtn. Sets page back to default view after successful search
             def resetView():
                 viewAssetBtn.config(state=ACTIVE)
                 viewWorksiteBtn.config(state=ACTIVE)
@@ -924,18 +1011,23 @@ class ViewPage(Frame):
                 resetBtn.destroy()
                 viewScroll.destroy()
 
+            # Function to set page back to default view used after and error
             def softResetView():
                 viewAssetBtn.config(state=ACTIVE)
                 viewWorksiteBtn.config(state=ACTIVE)
                 viewAssignmentsBtn.config(state=ACTIVE)
 
+            # Disable previous buttons to prevent extra widgets from breaking layout structure
             viewAssetBtn.config(state=DISABLED)
             viewWorksiteBtn.config(state=DISABLED)
             viewAssignmentsBtn.config(state=DISABLED)
 
+            # Retrieves a list of tuples of all assignemnt entitites in database 'assignemnt' table
             assignmentList = database.viewAllAssignments(conn)
 
+            # Checks if database 'assignment' table is empty. If so, prints error. If not, displays entities
             if not len(assignmentList) == 0:
+                # Creates treeview to display entity data
                 viewScroll = Scrollbar(resultFrame)
                 assignmentTree = ttk.Treeview(resultFrame,height=20,yscrollcommand=viewScroll.set)
                 assignmentTree['columns']=("Assignment ID","Asset ID","Asset Type","Asset Name","Asset Model No",
@@ -958,13 +1050,17 @@ class ViewPage(Frame):
                 assignmentTree.heading("Worksite ID", text="Worksite ID")
                 assignmentTree.heading("Order ID", text="Order ID")
                 assignmentTree.heading("Worksite Type", text="Worksite Type")
+                # Tags to display entity data in alternating colors
                 assignmentTree.tag_configure('even', background="gainsboro")
                 assignmentTree.tag_configure('odd', background="white")
+
+                # loops through list of tuples and inserts entity data to treeview.
                 i=0
                 for assignment in range(0,len(assignmentList)):
                     resultTup = assignmentList[assignment]
                     resultAssetID = resultTup[1]
                     resultWorksiteID = resultTup[2]
+                    # Searches database for asset and worksite IDs found in assignment entity
                     foundAsset = database.viewOneAsset(conn, resultAssetID)
                     foundWorksite = database.viewOneWorksite(conn, resultWorksiteID)
                     if i % 2 == 0:
@@ -978,9 +1074,11 @@ class ViewPage(Frame):
                                             foundAsset[2],foundAsset[5],resultTup[2],
                                             foundWorksite[1],foundWorksite[2]),tags=('odd',))
                     i+=1
+                
                 assignmentTree.pack(side="left")
                 viewScroll.pack(side="left",fill="y")
                 viewScroll.config(command=assignmentTree.yview)
+                # Button for reseting page view after entity data is displayed
                 resetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
                                        command=lambda: resetView())
                 resetBtn.pack(side="right",padx=50)
@@ -1046,11 +1144,19 @@ class AssignmentPage(Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        def comboSearch():
+        ##============================================================
+        ## WIDGET FUNCTION SETTINGS
+        ##
 
+        # Function for searchComboBtn. 
+        def comboSearch():
+            
+            # Function for confirmBtn.
             def confirmAssign():
+                # Adds entity to assignment table in database
                 database.addAssignment(conn, entry1, entry2)
                 messagebox.showinfo("Assignment Success","Entity Assignment Successful")
+                # Reset page to default view
                 searchComboBtn.config(state=ACTIVE)
                 worksiteTree.destroy()
                 assetTree.destroy()
@@ -1061,8 +1167,9 @@ class AssignmentPage(Frame):
                 searchEntry1.delete(0,END)
                 searchEntry2.delete(0,END)
 
-
+            # Function for resetBtn.
             def resetView():
+                # Reset page to default view
                 searchComboBtn.config(state=ACTIVE)
                 worksiteTree.destroy()
                 assetTree.destroy()
@@ -1073,29 +1180,35 @@ class AssignmentPage(Frame):
                 searchEntry1.delete(0,END)
                 searchEntry2.delete(0,END)
 
+            # Get user-entry data
             entry1 = searchEntry1.get()
             entry2 = searchEntry2.get()
+
+            # get asset and worksite entity matching user-given IDs
             assetID = database.viewOneAsset(conn, entry1)
             worksiteID = database.viewOneWorksite(conn, entry2)
 
+            # Checks for missing user entires. If so, gives error and resets. If not, shows entity data.
             if (entry1 == "") or (entry2 == ""):
                 messagebox.showerror("Missing Entry","Please Enter an Asset ID and Worksite ID")
                 searchEntry1.delete(0,END)
                 searchEntry2.delete(0,END)
                 searchComboBtn.config(state=ACTIVE)
             elif assetID == None:
+                # User-given asset ID found no matches
                 messagebox.showerror("Asset Not Found","No asset exists with that Asset ID")
                 searchEntry1.delete(0,END)
                 searchEntry2.delete(0,END)
                 searchComboBtn.config(state=ACTIVE)
             elif worksiteID == None:
+                # User-given worksite ID found no matches
                 messagebox.showerror("Worksite Not Found","No worksite exists with that Worksite ID")
                 searchEntry1.delete(0,END)
                 searchEntry2.delete(0,END)
                 searchComboBtn.config(state=ACTIVE)
             else:
                 searchComboBtn.config(state=DISABLED)
-                
+                # create treeview for found asset data
                 assetLabel = Label(resultFrame,text="Asset:",font=('Arial',20),bg="#bcdfeb")
                 assetLabel.pack(pady=10)
                 assetTree = ttk.Treeview(resultFrame,height=1)
@@ -1118,6 +1231,7 @@ class AssignmentPage(Frame):
                                  assetID[0],assetID[2],assetID[1],
                                  assetID[3],assetID[4],assetID[5]))
                 assetTree.pack()
+                # create treeview for found worksite data
                 worksiteLabel = Label(resultFrame,text="Worksite:",font=('Arial',20),bg="#bcdfeb")
                 worksiteLabel.pack(pady=10)
                 worksiteTree = ttk.Treeview(resultFrame,height=1)
@@ -1140,6 +1254,7 @@ class AssignmentPage(Frame):
                                  worksiteID[0],worksiteID[1],worksiteID[2],
                                  worksiteID[3],worksiteID[4],worksiteID[5]))
                 worksiteTree.pack()
+                # Buttons to confirm assignment or reset page to default view
                 confirmBtn = Button(resultFrame,text="Confirm Assignment", font=('Arial',20),command=lambda: confirmAssign())
                 confirmBtn.pack(pady=20)
                 resetBtn = Button(resultFrame,text="Reset", font=('Arial',20),
